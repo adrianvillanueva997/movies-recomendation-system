@@ -3,3 +3,5 @@ venv_recomendations/
 \.vscode/
 \.idea/
 *.pyc
+venv/
+*.csv
