@@ -78,10 +78,8 @@ def create_tables():
             links_query = text(
                 "CREATE TABLE IF NOT EXISTS proyecto_SI.links "
                 "(movieID int(11) not null,"
-                "imdbID int(11),"
-                "tmdbID int(11),"
-                "constraint links_imbdID_uindex unique (imdbID),"
-                "constraint links_tmdbID_uindex unique (tmdbID),"
+                "imdbID varchar(11),"
+                "tmdbID varchar(11),"
                 "constraint links_movies_movieID_fk foreign key (movieID) references proyecto_SI.movies (movieID))"
                 "comment 'Table that has all the movies IDs from IMDB and TMDB. This table references movies.';"
 
@@ -95,7 +93,6 @@ def create_tables():
                 "(userID int(11),"
                 "movieID int(11) not null,"
                 "tag varchar(200),"
-                "timestamp timestamp default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP,"
                 "constraint tags_movies_movieID_fk foreign key (movieID) references proyecto_SI.movies (movieID))"
                 "comment 'Table that has all the movies with their ID, title and genres';"
             )
@@ -107,8 +104,7 @@ def create_tables():
                 "CREATE TABLE IF NOT EXISTS proyecto_SI.ratings"
                 "(userID int(11) not null,"
                 "movieID int(11) not null,"
-                "rating double not null,"
-                "timestamp timestamp default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP,"
+                "rating float not null,"
                 "constraint rating_movies_movieID_fk foreign key (movieID) references proyecto_SI.movies (movieID))"
             )
             conn.execute(ratings_query)
@@ -145,7 +141,7 @@ def export_movie_file(file_path):
             query = text("INSERT INTO proyecto_SI.movies (movieID, title, genres) "
                          "VALUES (:_movie_id, :_titles, :_genres)")
             for row in reader:
-                movie_id = row['movieId']
+                movie_id = int(row['movieId'])
                 title = row['title']
                 genres = row['genres']
                 conn.execute(query, _movie_id=movie_id, _titles=title, _genres=genres)
@@ -159,15 +155,15 @@ def export_ratings_file(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
         reader = csv.DictReader(file)
         with engine.connect() as conn:
-            query = text("INSERT INTO proyecto_SI.ratings (movieID, rating, userID, timestamp) "
-                         "VALUES (:_movie_id, :_rating,:_userID,:_timestamp)")
+            query = text("INSERT INTO proyecto_SI.ratings (movieID, rating, userID) "
+                         "VALUES (:_movie_id, :_rating,:_userID)")
             rows = 1
             for row in reader:
-                movie_id = row['movieId']
-                rating = row['rating']
-                userID = row['userId']
+                movie_id = int(row['movieId'])
+                rating = float(row['rating'])
+                userID = int(row['userId'])
                 timestamp = row['timestamp']
-                conn.execute(query, _movie_id=movie_id, _rating=rating, _userID=userID, _timestamp=timestamp)
+                conn.execute(query, _movie_id=movie_id, _rating=rating, _userID=userID)
                 logging.info(f'Inserted {rows} rows')
                 rows += 1
     logging.debug('Rating csv file exported successfully')
@@ -178,15 +174,15 @@ def export_tags_file(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
         reader = csv.DictReader(file)
         with engine.connect() as conn:
-            query = text("INSERT INTO proyecto_SI.tags (movieID, userID, tag, timestamp)"
-                         "VALUES (:_movie_id, :_userID,:_tag,:_timestamp)")
+            query = text("INSERT INTO proyecto_SI.tags (movieID, userID, tag)"
+                         "VALUES (:_movie_id, :_userID,:_tag)")
             rows = 1
             for row in reader:
                 movie_id = row['movieId']
                 userID = row['userId']
                 tag = row['tag']
                 timestamp = row['timestamp']
-                conn.execute(query, _movie_id=movie_id, _userID=userID, _tag=tag, _timestamp=timestamp)
+                conn.execute(query, _movie_id=movie_id, _userID=userID, _tag=tag)
                 logging.info(f'Inserted {rows} rows')
                 rows += 1
     logging.debug('Movies csv file exported successfully')
