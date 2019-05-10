@@ -23,20 +23,13 @@
     <ul>
         <li><a href=recomendador.html>Home</a></li>
         <li><a href="recomendarUsuarios.html">Recomendar a usuarios</a></li>
-        <li><a class="active" href="misRecomendaciones.html">Mis recomendaciones</a></li>
+        <li><a class="active" href="misRecomendaciones.php">Mis recomendaciones</a></li>
     </ul>
 </nav>
 
 <!--
 <?php
-
-$dbhost = "51.15.59.15";
-$dbuser = "proyecto_si";
-$dbpass = "bicho";
-$dbname = "proyecto_SI";
-$tablename= "movies";
-$connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
-
+include 'PHP/movies.php';
 ?>
 -->
 
@@ -51,36 +44,31 @@ $connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
             <form action="../../form-result.php" target="_blank">
                 <p> Selecciona una película:
 
-                    <select name="Peliculas">
-                        <option>Seleccione una opción</option>
-                        <?php
-				$conexion=mysql_connect("51.15.59.15","proyecto_si","bicho") or die("Problemas en la conexion");
-				mysql_select_db("proyecto_SI",$conexion) or die("Problemas en la selección de la base de datos");  
-				mysql_query ("SET NAMES 'utf8'");
-				$clavebuscadah=mysql_query("select movieID, title from movies",$conexion) ordie("Problemas en el select:".mysql_error());
-				while($row = mysql_fetch_array($clavebuscadah))
-				{
-				echo'<OPTION VALUE="'.$row['movieID'].'">'.$row['title'].'</OPTION>';
-                        }
-                        ?>
-                    </select>
+                    <label>
+                        <select name="Peliculas">
+                            <option>Seleccione una opción</option>
+                            <?php insert_movies_in_ComboBox() ?>
+                        </select>
+                    </label>
 
                     <br><br>
 
                     Valoración:
-                    <select name="Valoraciones">
-                        <option>0</option>
-                        <option>0,5</option>
-                        <option>1</option>
-                        <option>1,5</option>
-                        <option>2</option>
-                        <option>2,5</option>
-                        <option>3</option>
-                        <option>3,5</option>
-                        <option>4</option>
-                        <option>4,5</option>
-                        <option>5</option>
-                    </select>
+                    <label>
+                        <select name="Valoraciones">
+                            <option>0</option>
+                            <option>0,5</option>
+                            <option>1</option>
+                            <option>1,5</option>
+                            <option>2</option>
+                            <option>2,5</option>
+                            <option>3</option>
+                            <option>3,5</option>
+                            <option>4</option>
+                            <option>4,5</option>
+                            <option>5</option>
+                        </select>
+                    </label>
                 </p>
                 <button type="submit" class="boton_personalizado">Votar</button>
                 <br><br>
@@ -171,7 +159,8 @@ $connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
 <footer>
     <div class=footer align="center"><br>
         <p> Recomendador creado por <a href="https://github.com/adrianvillanueva997"> Adrián Villanueva </a> y <a
-                href="https://github.com/adrianvillanueva997"> Laura Vizcaíno, </a> derechos reservados &copy; </p> <br>
+                    href="https://github.com/adrianvillanueva997"> Laura Vizcaíno, </a> derechos reservados &copy; </p>
+        <br>
     </div>
 </footer>
 
