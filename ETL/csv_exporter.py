@@ -4,22 +4,14 @@ import coloredlogs
 import logging
 from sqlalchemy.sql import text
 from sqlalchemy import create_engine
+from dotenv import load_dotenv
 
-# =====================
-ip = '51.15.59.15/?charset=utf8mb4'
-username = 'proyecto_si'
-password = 'bicho'
-
-csv_links = 'CSV/links.csv'
-csv_movies = 'CSV/movies.csv'
-csv_ratings = 'CSV/ratings.csv'
-csv_tags = 'CSV/tags.csv'
-# =====================
-
-engine = create_engine(f"mysql+mysqldb://{username}:{password}@{ip}", encoding='utf-8')
+load_dotenv(verbose=True)
 logger = logging.getLogger(__name__)
 coloredlogs.install(level='DEBUG')
 coloredlogs.install(level='DEBUG', logger=logger)
+engine = create_engine(f"mysql+mysqldb://{os.getenv('USERNAME')}:{os.getenv('PASSWORD')}@{os.getenv('IP')}",
+                       encoding='utf-8')
 
 
 def check_if_files_exist(csv_files):
@@ -115,6 +107,11 @@ def create_tables():
 
 
 def export_links_file(file_path):
+    """
+    Function that reads the content of the links csv file and exports its content to the database
+    :param file_path:
+    :return:
+    """
     logging.info('Exporting links csv file')
     with open(file_path, 'r', encoding='utf-8') as file:
         reader = csv.DictReader(file)
@@ -133,6 +130,11 @@ def export_links_file(file_path):
 
 
 def export_movie_file(file_path):
+    """
+    Function that reads the movies csv file and exports its content to the database
+    :param file_path:
+    :return:
+    """
     logging.info('Exporting movies csv file')
     with open(file_path, 'r', encoding='utf-8') as file:
         reader = csv.DictReader(file)
@@ -151,6 +153,11 @@ def export_movie_file(file_path):
 
 
 def export_ratings_file(file_path):
+    """
+    Function that reads the rating csv file and exports its content to the database
+    :param file_path:
+    :return:
+    """
     logging.info('Exporting ratings csv file')
     with open(file_path, 'r', encoding='utf-8') as file:
         reader = csv.DictReader(file)
@@ -170,6 +177,11 @@ def export_ratings_file(file_path):
 
 
 def export_tags_file(file_path):
+    """
+    Function that reads the tags csv file and exports its content to the database
+    :param file_path:
+    :return:
+    """
     logging.info('Exporting tags csv file')
     with open(file_path, 'r', encoding='utf-8') as file:
         reader = csv.DictReader(file)
@@ -189,7 +201,7 @@ def export_tags_file(file_path):
 
 
 if __name__ == "__main__":
-    csv_files = [csv_links, csv_movies, csv_ratings, csv_tags]
+    csv_files = [os.getenv('CSV_LINKS'), os.getenv('CSV_MOVIES'), os.getenv('CSV_RATINGS'), os.getenv('CSV_TAGS')]
     if check_if_files_exist(csv_files):
         create_database()
         create_tables()
@@ -198,6 +210,5 @@ if __name__ == "__main__":
         export_links_file(csv_files[0])
         export_ratings_file(csv_files[2])
         export_tags_file(csv_files[3])
-
     else:
         logging.critical('Files not found. Finishing script')
