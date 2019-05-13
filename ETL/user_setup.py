@@ -103,6 +103,29 @@ def calculate_user_to_user_mean(user_count):
                     conn.execute(query, _user_id1=i, _user_id2=j)
 
 
+def get_similar_movies_ratings(user_count):
+    with engine.connect() as conn:
+        common_ratings_query = text('select * from proyecto_SI.ratings where userID like :_user_id1'
+                                    ' and proyecto_SI.ratings.movieID in '
+                                    '(select movieID from proyecto_SI.ratings '
+                                    'where userID like :_user_id2)')
+
+        user_user_mean_query = text('select * from proyecto_SI.user_mean '
+                                    'where id_user1 like :_user_id1 and id_user2 like :_user_id2')
+        for i in range(1, user_count):
+            for j in range(1, user_count):
+                if i != j:
+                    list1 = []
+                    result1 = conn.execute(common_ratings_query, _user_id1=i, _user_id2=j)
+                    result2 = conn.execute(common_ratings_query, _user_id1=j, _user_id2=i)
+                    for result in result1:
+                        list1.append(result['rating'])
+
+
+def calculate_similitude(user_count):
+    pass
+
+
 if __name__ == '__main__':
     logging.info('Creating user global means table')
     create_user_data_table()
