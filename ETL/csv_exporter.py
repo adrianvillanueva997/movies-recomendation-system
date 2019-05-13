@@ -6,13 +6,20 @@ import coloredlogs
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.sql import text
+from sqlalchemy.engine.url import URL
 
 load_dotenv(verbose=True)
 logger = logging.getLogger(__name__)
 coloredlogs.install(level='DEBUG')
 coloredlogs.install(level='DEBUG', logger=logger)
-engine = create_engine(f"mysql+mysqldb://{os.getenv('USERNAME')}:{os.getenv('PASSWORD')}@{os.getenv('IP')}",
-                       encoding='utf-8')
+db_url = {
+    'drivername': 'mysql',
+    'username': os.getenv('USERNAME'),
+    'password': os.getenv('PASSWORD'),
+    'host': os.getenv('IP'),
+    'query': {'charset': 'utf8'},  # the key-point setting
+}
+engine = create_engine(URL(**db_url), encoding='utf-8')
 
 
 def check_if_files_exist(csv_files):
@@ -41,7 +48,7 @@ def create_database():
     logging.info('Creating database')
     try:
         with engine.connect() as conn:
-            query = text('CREATE DATABASE if not exists proyecto_SI collate = utf8mb4_bin')
+            query = text('CREATE DATABASE if not exists proyecto_SI;')
             conn.execute(query)
             logging.debug('Database created successfully')
     except Exception as e:
@@ -87,6 +94,7 @@ def create_tables():
                 "movieID int(11) not null,"
                 "tag varchar(200),"
                 "constraint tags_movies_movieID_fk foreign key (movieID) references proyecto_SI.movies (movieID))"
+                "DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_general_ci "
                 "comment 'Table that has all the movies with their ID, title and genres';"
             )
             conn.execute(tags_query)
@@ -125,7 +133,7 @@ def export_links_file(file_path):
                 imdbId = row['imdbId']
                 tmdbID = row['tmdbId']
                 conn.execute(query, _movie_id=movie_id, _imdbID=imdbId, _tmdbID=tmdbID)
-                logging.info(f'Inserted {rows} rows')
+                logging.info(f'Inserted {rows} links')
                 rows += 1
     logging.debug('Links csv file exported successfully')
 
@@ -148,7 +156,7 @@ def export_movie_file(file_path):
                 title = row['title']
                 genres = row['genres']
                 conn.execute(query, _movie_id=movie_id, _titles=title, _genres=genres)
-                logging.info(f'Inserted {rows} rows')
+                logging.info(f'Inserted {rows} movies')
                 rows += 1
     logging.debug('Movies csv file exported successfully')
 
@@ -171,7 +179,7 @@ def export_ratings_file(file_path):
                 rating = float(row['rating'])
                 userID = int(row['userId'])
                 conn.execute(query, _movie_id=movie_id, _rating=rating, _userID=userID)
-                logging.info(f'Inserted {rows} rows')
+                logging.info(f'Inserted {rows} ratings')
                 rows += 1
     logging.debug('Rating csv file exported successfully')
 
@@ -194,7 +202,7 @@ def export_tags_file(file_path):
                 userID = row['userId']
                 tag = row['tag']
                 conn.execute(query, _movie_id=movie_id, _userID=userID, _tag=tag)
-                logging.info(f'Inserted {rows} rows')
+                logging.info(f'Inserted {rows} tags')
                 rows += 1
     logging.debug('Movies csv file exported successfully')
 

@@ -3,15 +3,23 @@ import os
 
 import coloredlogs
 from dotenv import load_dotenv
+from math import sqrt
 from sqlalchemy import create_engine
+from sqlalchemy.engine.url import URL
 from sqlalchemy.sql import text
 
 load_dotenv(verbose=True)
 logger = logging.getLogger(__name__)
 coloredlogs.install(level='DEBUG')
 coloredlogs.install(level='DEBUG', logger=logger)
-engine = create_engine(f"mysql+mysqldb://{os.getenv('USERNAME')}:{os.getenv('PASSWORD')}@{os.getenv('IP')}",
-                       encoding='utf-8')
+db_url = {
+    'drivername': 'mysql',
+    'username': os.getenv('USERNAME'),
+    'password': os.getenv('PASSWORD'),
+    'host': os.getenv('IP'),
+    'query': {'charset': 'utf8'},  # the key-point setting
+}
+engine = create_engine(URL(**db_url), encoding='utf-8')
 
 
 def get_all_user_count():
@@ -42,7 +50,8 @@ def create_user_data_table():
                 unique (user_id)
         );
         alter table proyecto_SI.user_global_mean
-            add primary key (user_id);""")
+            add primary key (user_id)
+            """)
         conn.execute(query)
 
 
@@ -58,7 +67,7 @@ def calculate_global_user_mean(user_count):
                      'from proyecto_SI.ratings where userID like :_user_id));')
         for i in range(1, user_count):
             conn.execute(query, _user_id=i)
-            logging.debug(f'Calculated: {i} of {user_count}')
+            logging.info(f'Calculated: {i} of {user_count}')
 
 
 def create_user_user_mean():
@@ -74,10 +83,22 @@ def create_user_user_mean():
             id_user2 int NOT NULL,
             mean DOUBLE NULL,
             CONSTRAINT user_mean_PK PRIMARY KEY (id)
-        )
-        ENGINE=InnoDB
-        DEFAULT CHARSET=utf8mb4
-        COLLATE=utf8mb4_bin;""")
+        )""")
+        conn.execute(query)
+
+
+def create_similitude_table():
+    with engine.connect() as conn:
+        query = text("""
+        create table if not exists proyecto_SI.similitude
+        (
+            id int auto_increment,
+            user_id_1 int null,
+            user_id_2 int null,
+            pearson_corr double null,
+            constraint table_name_pk
+                primary key (id)
+        ); """)
         conn.execute(query)
 
 
@@ -103,6 +124,24 @@ def calculate_user_to_user_mean(user_count):
                     conn.execute(query, _user_id1=i, _user_id2=j)
 
 
+def pearson(mean1, mean2, ratings_list1, ratings_list2):
+    a = 0
+    bx = 0
+    by = 0
+    for i in range(len(ratings_list1)):
+        x_val = ratings_list1[i] - mean1
+        y_val = ratings_list2[i] - mean2
+        a += x_val * y_val
+        bx += x_val ** 2
+        by += y_val ** 2
+    b = sqrt(bx * by)
+    if b != 0:
+        result = a / b
+        return result
+    else:
+        return None
+
+
 def get_similar_movies_ratings(user_count):
     with engine.connect() as conn:
         common_ratings_query = text('select * from proyecto_SI.ratings where userID like :_user_id1'
@@ -110,20 +149,30 @@ def get_similar_movies_ratings(user_count):
                                     '(select movieID from proyecto_SI.ratings '
                                     'where userID like :_user_id2)')
 
-        user_user_mean_query = text('select * from proyecto_SI.user_mean '
-                                    'where id_user1 like :_user_id1 and id_user2 like :_user_id2')
+        user_user_mean_query = text('select * from proyecto_SI.user_mean where id_user1 like :_user_id1 '
+                                    'and proyecto_SI.user_mean.id_user2 like :_user_id2')
+
+        insert_similitude = text('insert into proyecto_SI.similitude (user_id_1, user_id_2, pearson_corr) '
+                                 'values (:_user_id_1, :_user_id_2,:_pearson);')
         for i in range(1, user_count):
             for j in range(1, user_count):
                 if i != j:
-                    list1 = []
-                    result1 = conn.execute(common_ratings_query, _user_id1=i, _user_id2=j)
-                    result2 = conn.execute(common_ratings_query, _user_id1=j, _user_id2=i)
-                    for result in result1:
-                        list1.append(result['rating'])
-
-
-def calculate_similitude(user_count):
-    pass
+                    result_mean1 = conn.execute(user_user_mean_query, _user_id1=i, _user_id2=j)
+                    result_mean2 = conn.execute(user_user_mean_query, _user_id1=j, _user_id2=i)
+                    mean1 = result_mean1.first()[3]
+                    mean2 = result_mean2.first()[3]
+                    if mean1 or mean2 is None:
+                        ratings_list1 = []
+                        ratings_list2 = []
+                        result1 = conn.execute(common_ratings_query, _user_id1=i, _user_id2=j)
+                        result2 = conn.execute(common_ratings_query, _user_id1=j, _user_id2=i)
+                        for result in result1:
+                            ratings_list1.append(result['rating'])
+                        for result in result2:
+                            ratings_list2.append(result['rating'])
+                        similitude = pearson(mean1, mean2, ratings_list1, ratings_list2)
+                        conn.execute(insert_similitude, _user_id_1=i, _user_id_2=j, _pearson=similitude)
+                        logging.info(f'Calculated similitude between users {i} and {j}')
 
 
 if __name__ == '__main__':
@@ -134,9 +183,13 @@ if __name__ == '__main__':
     user_count = get_all_user_count()
     logging.debug(f'Found: {user_count} users')
     logging.info(f'Calculating global means for {user_count} users')
-    calculate_global_user_mean(user_count)
+    # calculate_global_user_mean(user_count)
     logging.debug(f'Creating user_user mean table')
-    create_user_user_mean()
+    # create_user_user_mean()
     logging.info(f'Table user_user created successfully')
     logging.info('Calculating user to user mean')
-    calculate_user_to_user_mean(user_count)
+    # calculate_user_to_user_mean(user_count)
+    logging.info('Creating similitude Table')
+    create_similitude_table()
+    logging.debug('Similitude table created successfully')
+    get_similar_movies_ratings(user_count)

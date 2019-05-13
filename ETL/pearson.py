@@ -6,8 +6,6 @@ list2 = [5, 3, 1, 2, 1]
 
 def pearson(list1, list2, mean1, mean2):
     if len(list1) == len(list2):
-        mean1 = sum(list1) / len(list1)
-        mean2 = sum(list2) / len(list2)
         a = 0
         bx = 0
         by = 0
