@@ -1,7 +1,12 @@
 <?php
-include "utilities.php";
-include "database.php";
+include 'utilities.php';
+include 'database.php';
 
+/**
+ * Public function that selects all the movies from the database and returns
+ * an array with all the movies
+ * @return array
+ */
 function getMovies()
 {
     $con = connect_to_db();
@@ -16,6 +21,9 @@ function getMovies()
     return $list;
 }
 
+/**
+ * Public function that prints all the movies in a select tag
+ */
 function insert_movies_in_ComboBox()
 {
     $movies = getMovies();

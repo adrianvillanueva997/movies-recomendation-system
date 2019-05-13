@@ -1,10 +1,11 @@
 import csv
-import os
-import coloredlogs
 import logging
-from sqlalchemy.sql import text
-from sqlalchemy import create_engine
+import os
+
+import coloredlogs
 from dotenv import load_dotenv
+from sqlalchemy import create_engine
+from sqlalchemy.sql import text
 
 load_dotenv(verbose=True)
 logger = logging.getLogger(__name__)
@@ -169,7 +170,6 @@ def export_ratings_file(file_path):
                 movie_id = int(row['movieId'])
                 rating = float(row['rating'])
                 userID = int(row['userId'])
-                timestamp = row['timestamp']
                 conn.execute(query, _movie_id=movie_id, _rating=rating, _userID=userID)
                 logging.info(f'Inserted {rows} rows')
                 rows += 1
@@ -193,7 +193,6 @@ def export_tags_file(file_path):
                 movie_id = row['movieId']
                 userID = row['userId']
                 tag = row['tag']
-                timestamp = row['timestamp']
                 conn.execute(query, _movie_id=movie_id, _userID=userID, _tag=tag)
                 logging.info(f'Inserted {rows} rows')
                 rows += 1

@@ -1,9 +1,10 @@
-import os
-import coloredlogs
 import logging
-from sqlalchemy.sql import text
-from sqlalchemy import create_engine
+import os
+
+import coloredlogs
 from dotenv import load_dotenv
+from sqlalchemy import create_engine
+from sqlalchemy.sql import text
 
 load_dotenv(verbose=True)
 logger = logging.getLogger(__name__)
@@ -14,6 +15,10 @@ engine = create_engine(f"mysql+mysqldb://{os.getenv('USERNAME')}:{os.getenv('PAS
 
 
 def get_all_user_count():
+    """
+    Function that selects all the users in the database and returns the unique users from the table
+    :return:
+    """
     with engine.connect() as conn:
         query = text('select count(distinct proyecto_SI.ratings.userID) from proyecto_SI.ratings;')
         result = conn.execute(query)
@@ -24,6 +29,10 @@ def get_all_user_count():
 
 
 def create_user_data_table():
+    """
+    Function that creates the global user mean table
+    :return:
+    """
     with engine.connect() as conn:
         query = text("""
         create table if not exists proyecto_SI.user_global_mean(
@@ -38,6 +47,11 @@ def create_user_data_table():
 
 
 def calculate_global_user_mean(user_count):
+    """
+    Function that calculates the global user mean from each user
+    :param user_count:
+    :return:
+    """
     with engine.connect() as conn:
         query = text('insert into proyecto_SI.user_global_mean (user_id, mean) '
                      'values (:_user_id, (select avg(proyecto_SI.ratings.rating) '
@@ -48,6 +62,10 @@ def calculate_global_user_mean(user_count):
 
 
 def create_user_user_mean():
+    """
+    Function that creates the user user mean table
+    :return:
+    """
     with engine.connect() as conn:
         query = text("""
         CREATE TABLE if not exists proyecto_SI.user_mean (
@@ -64,6 +82,11 @@ def create_user_user_mean():
 
 
 def calculate_user_to_user_mean(user_count):
+    """
+    Function that receives an user count as param and inserts each user user mean
+    :param user_count:
+    :return:
+    """
     with engine.connect() as conn:
         query = text("""
         insert into proyecto_SI.user_mean (id_user1, id_user2, mean)

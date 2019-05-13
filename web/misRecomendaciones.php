@@ -6,7 +6,6 @@
     <meta http-equiv=”Content-Language” content=”es”>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta http-equiv=“refresh” content=“30”>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -56,6 +55,7 @@ include 'PHP/movies.php';
                     Valoración:
                     <label>
                         <select name="Valoraciones">
+                            <?php ?>
                             <option>0</option>
                             <option>0,5</option>
                             <option>1</option>
@@ -165,8 +165,5 @@ include 'PHP/movies.php';
 </footer>
 
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="js/jquery-3.2.1.min.js"></script>
-<script src="js/popper.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
 </body>
 </html>
