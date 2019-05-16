@@ -13,13 +13,16 @@
     <link rel="stylesheet" href="css/Principal.css">
 </head>
 <body>
+<?php
+include 'PHP/user-user.php';
+?>
 
 
 <header align="center"><h1>Recomendador de películas</h1></header>
 <nav>
     <ul>
-        <li><a href=recomendador.html>Home</a></li>
-        <li><a class="active" href="recomendarUsuarios.html">Recomendar a usuarios</a></li>
+        <li><a href=index.html>Home</a></li>
+        <li><a class="active" href="recomendarUsuarios.php">Recomendar a usuarios</a></li>
         <li><a href="misRecomendaciones.php">Mis recomendaciones</a></li>
     </ul>
 </nav>
@@ -70,21 +73,34 @@
     </div>
 </div>
 
+<h2 align="center">Vecinos</h2>
+<h3>
+    <table align="center" border=2>
+        <tr>
+            <th>id usuario</th>
+            <th>Similitud</th>
+        </tr>
+        <?php
+        #usuario, limite 1, limite 2, limite de resultados
+        $neighbours = get_neighbours(1, 0.8, 1, 5);
+        print_neighbours($neighbours);
+        ?>
+    </table>
+</h3>
 
 <h2 align="center"> Ranking</h2>
 <h3>
     <table align="center" border=2>
         <tr>
-            <th>ID ÍTEM</th>
-            <th>PREDICCIÓN</th>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Predicción</th>
         </tr>
-        <tr align="center">
-            <td>12</td>
-            <td>1.5</td>
-        </tr>
-        <tr align="center">
-            <td>2</td>
-            <td>4</td>
+        <?php
+        $unseen = get_unseen_movies($neighbours);
+        $ranking = make_ranking($unseen, $neighbours, 5);
+        print_ranking($ranking);
+        ?>
     </table>
 </h3>
 
@@ -133,7 +149,8 @@
 <footer>
     <div class=footer align="center"><br>
         <p> Recomendador creado por <a href="https://github.com/adrianvillanueva997"> Adrián Villanueva </a> y <a
-                href="https://github.com/adrianvillanueva997"> Laura Vizcaíno, </a> derechos reservados &copy; </p> <br>
+                    href="https://github.com/adrianvillanueva997"> Laura Vizcaíno, </a> derechos reservados &copy; </p>
+        <br>
     </div>
 </footer>
 

@@ -20,8 +20,8 @@
 
 <nav>
     <ul>
-        <li><a href=recomendador.html>Home</a></li>
-        <li><a href="recomendarUsuarios.html">Recomendar a usuarios</a></li>
+        <li><a href=index.html>Home</a></li>
+        <li><a href="recomendarUsuarios.php">Recomendar a usuarios</a></li>
         <li><a class="active" href="misRecomendaciones.php">Mis recomendaciones</a></li>
     </ul>
 </nav>
@@ -29,6 +29,7 @@
 <!--
 <?php
 include 'PHP/movies.php';
+include 'PHP/user-user.php';
 ?>
 -->
 
@@ -42,7 +43,6 @@ include 'PHP/movies.php';
         <div class="col-md-7">
             <form action="../../form-result.php" target="_blank">
                 <p> Selecciona una película:
-
                     <label>
                         <select name="Peliculas">
                             <option>Seleccione una opción</option>
