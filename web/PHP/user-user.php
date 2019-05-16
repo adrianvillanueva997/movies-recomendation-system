@@ -1,18 +1,6 @@
 <?php
-include 'utilities.php';
-function connect_to_db()
-{
-    $servername = '51.15.59.15';
-    $username = 'proyecto_si';
-    $password = 'bicho';
-    $database = 'proyecto_SI';
-    $conn = new mysqli($servername, $username, $password, $database);
-    if ($conn->connect_error) {
-        die('Connection failed: ' . $conn->connect_error);
-    }
-    return $conn;
-}
-
+include_once 'database.php';
+include_once 'utilities.php';
 /**
  * Function that gets the user1 mean related to the user 2 from the Database
  * @param $id_user1
@@ -182,14 +170,13 @@ function make_ranking($unseen_movies, $neighbours, $top_items)
         if ($denominator > 0) {
             $prediction = $original_user_mean + ($numerator / $denominator);
             $movie_name = get_movie_name($movie);
-            $ranking['prediction'] = $prediction;
-            $ranking['movie_id'] = $movie;
-            $ranking['movie_name'] = $movie_name;
+            $ranking['prediction'][] = $prediction;
+            $ranking['movie_id'][] = $movie;
+            $ranking['movie_name'][] = $movie_name;
+            $counter++;
         }
-        $counter++;
-
     }
-    $ranking = asort($ranking);
+    console_log($ranking);
     return $ranking;
 }
 

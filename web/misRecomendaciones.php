@@ -28,8 +28,8 @@
 
 <!--
 <?php
-include 'PHP/movies.php';
-include 'PHP/user-user.php';
+include_once 'PHP/movies.php';
+include_once 'PHP/user-user.php';
 ?>
 -->
 
