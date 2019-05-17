@@ -177,6 +177,8 @@ function make_ranking($unseen_movies, $neighbours, $top_items)
         }
     }
     console_log($ranking);
+    $predictions = array_column($ranking, 'prediction');
+    array_multisort($ranking, SORT_DESC, $predictions);
     return $ranking;
 }
 
@@ -186,9 +188,9 @@ function print_ranking($ranking)
     $max = count($ranking['movie_id']);
     for ($i = 0; $i < $max; $i++) {
         echo '<tr align="center">
-                    <td>' . $ranking['movie_id'][$i] . '</td>
-                    <td>' . $ranking['movie_name'][$i] . '</td>
-                    <td>' . $ranking['prediction'][$i] . '</td>
+                    <td id="$i">' . $ranking['movie_id'][$i] . '</td>
+                    <td id="$i">' . $ranking['movie_name'][$i] . '</td>
+                    <td id="$i">' . $ranking['prediction'][$i] . '</td>
                </tr>';
     }
 }

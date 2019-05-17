@@ -1,6 +1,8 @@
 import logging
 import os
-
+import threading
+import time
+from concurrent.futures import ThreadPoolExecutor
 import coloredlogs
 from dotenv import load_dotenv
 from math import sqrt
@@ -178,7 +180,7 @@ def get_similar_movies_ratings(user_count):
 def create_cos_corr_table():
     with engine.connect() as conn:
         query = text("""
-        CREATE TABLE proyecto_SI.NewTable (
+        CREATE TABLE  if not exists proyecto_SI.sim_cos (
         id INT NOT NULL AUTO_INCREMENT,
         user_id_1 INT NULL,
         user_id_2 INT NULL,
@@ -191,36 +193,34 @@ def create_cos_corr_table():
         conn.execute(query)
 
 
-def calculate_cos_correlation(user_count):
+def calculate_cos_correlation(i, user_count):
     with engine.connect() as conn:
         query = text('select * from proyecto_SI.ratings where userID like :_user_id1'
                      ' and proyecto_SI.ratings.movieID in '
                      '(select movieID from proyecto_SI.ratings '
                      'where userID like :_user_id2)')
-        for i in range(1, user_count):
-            logging.debug(f'Calculating user: {i}')
-            for j in range(1, user_count):
-                if i != j:
-                    logging.info(f'Calculating user: {i} on user {j}')
-                    result_1 = conn.execute(query, _user_id1=i, _user_id2=j)
-                    result_2 = conn.execute(query, _user_id1=j, _user_id2=i)
-                    ratings_list1 = []
-                    ratings_list2 = []
-                    for result in result_1:
-                        ratings_list1.append(result['rating'])
-                    for result in result_2:
-                        ratings_list2.append(result['rating'])
-                    numerator = 0
-                    denominator_1 = 0
-                    denominator_2 = 0
-                    if len(ratings_list1) > 0:
-                        for k in range(0, len(ratings_list1)):
-                            numerator += (ratings_list1[k] * ratings_list2[k])
-                            denominator_1 += ratings_list1[k] * ratings_list1[k]
-                            denominator_2 += ratings_list2[k] * ratings_list2[k]
+        for j in range(1, user_count):
+            if i != j:
+                logging.info(f'Calculating user: {i} on user {j}')
+                result_1 = conn.execute(query, _user_id1=i, _user_id2=j)
+                result_2 = conn.execute(query, _user_id1=j, _user_id2=i)
+                ratings_list1 = []
+                ratings_list2 = []
+                for result in result_1:
+                    ratings_list1.append(result['rating'])
+                for result in result_2:
+                    ratings_list2.append(result['rating'])
+                numerator = 0
+                denominator_1 = 0
+                denominator_2 = 0
+                if len(ratings_list1) > 0:
+                    for k in range(0, len(ratings_list1)):
+                        numerator += (ratings_list1[k] * ratings_list2[k])
+                        denominator_1 += ratings_list1[k] * ratings_list1[k]
+                        denominator_2 += ratings_list2[k] * ratings_list2[k]
 
-                        similitude = numerator / (sqrt(denominator_1) * sqrt(denominator_2))
-                        print(similitude)
+                    similitude = numerator / (sqrt(denominator_1) * sqrt(denominator_2))
+                    print(similitude)
 
 
 if __name__ == '__main__':
@@ -242,6 +242,15 @@ if __name__ == '__main__':
     logging.debug('Similitude table created successfully')
     # get_similar_movies_ratings(user_count)
     logger.info('Creating Cos correlation table')
-    # create_cos_corr_table()
+    create_cos_corr_table()
     logger.debug('Cos similitude table created successfully')
-    calculate_cos_correlation(user_count)
+    with ThreadPoolExecutor(max_workers=128) as executor:
+        for i in range(1, user_count):
+            print("Task Executed {}".format(threading.current_thread()))
+            a = executor.submit(calculate_cos_correlation,i,user_count)
+            print(a)
+            
+
+
+
+    # calculate_cos_correlation(user_count)
