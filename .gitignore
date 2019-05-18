@@ -5,3 +5,5 @@ venv_recomendations/
 *.pyc
 venv/
 *.csv
+
+\.env
