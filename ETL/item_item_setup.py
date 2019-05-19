@@ -91,7 +91,7 @@ def calculate_movies_mean_count(i):
 
 def get_most_rated_movies():
     with engine.connect() as conn:
-        query = text('select * from proyecto_SI.movies_mean_count where rating_count >=25')
+        query = text('select * from proyecto_SI.movies_mean_count where rating_count >=35')
         results = conn.execute(query)
         movie_ids = []
         for result in results:
@@ -133,13 +133,12 @@ def insert_cos_similitude(i, similitude_movies):
                     for result in movie_2_ratings_results:
                         movie_2_ratings.append(mean - result['rating'])
                     if len(movie_1_ratings) != 0 and len(movie_2_ratings) != 0:
-                        if len(movie_1_ratings) != 0 and len(movie_2_ratings) != 0:
-                            if len(movie_1_ratings) < len(movie_2_ratings):
-                                x_1 = movie_1_ratings
-                                x_2 = movie_2_ratings
-                            else:
-                                x_1 = movie_2_ratings
-                                x_2 = movie_1_ratings
+                        if len(movie_1_ratings) < len(movie_2_ratings):
+                            x_1 = movie_1_ratings
+                            x_2 = movie_2_ratings
+                        else:
+                            x_1 = movie_2_ratings
+                            x_2 = movie_1_ratings
                         similitude = calculate_cos_similitude(x_1, x_2)
                         conn.execute(insert_similitude_query, _user_id=i, _movie_1_id=similitude_movies[j],
                                      _movie_2_id=similitude_movies[k],
