@@ -1,13 +1,13 @@
 <?php
 include_once 'database.php';
 include_once 'utilities.php';
-
 /**
  * Function that gets the user1 mean related to the user 2 from the Database
  * @param $id_user1
  * @param $id_user2
  * @return int
  */
+
 function get_user_user_mean($id_user1, $id_user2)
 {
     $con = connect_to_db();
@@ -23,14 +23,6 @@ function get_user_user_mean($id_user1, $id_user2)
     return $mean;
 }
 
-/**
- * Function that returns the neighbours from an user
- * @param $user1
- * @param $correlation_limit_1
- * @param $correlation_limit_2
- * @param $result_limit
- * @return array
- */
 function get_neighbours($user1, $correlation_limit_1, $correlation_limit_2, $result_limit)
 {
     $con = connect_to_db();
@@ -53,10 +45,6 @@ function get_neighbours($user1, $correlation_limit_1, $correlation_limit_2, $res
     return $dict;
 }
 
-/**
- * Function that prints the neighbours table
- * @param $neighbour_dict
- */
 function print_neighbours($neighbour_dict)
 {
     $iMax = count($neighbour_dict['similitude']);
@@ -68,11 +56,6 @@ function print_neighbours($neighbour_dict)
     }
 }
 
-/**
- * Function that receives the unseen movies from the original user according to it's neighbours
- * @param $neighbour_dict
- * @return array
- */
 function get_unseen_movies($neighbour_dict)
 {
     $con = connect_to_db();
@@ -110,11 +93,6 @@ function get_unseen_movies($neighbour_dict)
     return $unseen_movies;
 }
 
-/**
- * Function to get the user global mean
- * @param $user_id
- * @return int
- */
 function get_user_global_mean($user_id)
 {
     $con = connect_to_db();
@@ -131,12 +109,6 @@ function get_user_global_mean($user_id)
     return $mean;
 }
 
-/**
- * Function to get the movie ratings from an user
- * @param $id_user
- * @param $movie_id
- * @return int
- */
 function get_user_movie_rating($id_user, $movie_id)
 {
     $con = connect_to_db();
@@ -154,11 +126,6 @@ function get_user_movie_rating($id_user, $movie_id)
 
 }
 
-/**
- * Function to get the movie name from a movie ID
- * @param $movie_id
- * @return string
- */
 function get_movie_name($movie_id)
 {
     $con = connect_to_db();
@@ -175,13 +142,7 @@ function get_movie_name($movie_id)
     return $movie_name;
 }
 
-/**
- * Function that makes the top ranking of predictions for user x
- * @param $unseen_movies
- * @param $neighbours
- * @param $top_items
- * @return array
- */
+
 function make_ranking($unseen_movies, $neighbours, $top_items)
 {
     $ranking = [
@@ -216,72 +177,43 @@ function make_ranking($unseen_movies, $neighbours, $top_items)
             $counter++;
         }
     }
-    $predictions = array_column($ranking, 'prediction');
-    array_multisort($ranking, SORT_DESC, $predictions);
+    console_log($ranking);
     return $ranking;
 }
 
 
-/**
- * Function that prints the movies ranking
- * @param $ranking
- */
 function print_ranking($ranking)
 {
     $max = count($ranking['movie_id']);
     for ($i = 0; $i < $max; $i++) {
         echo '<tr align="center">
-                    <td id="$i">' . $ranking['movie_id'][$i] . '</td>
-                    <td id="$i">' . $ranking['movie_name'][$i] . '</td>
-                    <td id="$i">' . $ranking['prediction'][$i] . '</td>
+                    <td>' . $ranking['movie_id'][$i] . '</td>
+                    <td>' . $ranking['movie_name'][$i] . '</td>
+                    <td>' . $ranking['prediction'][$i] . '</td>
                </tr>';
     }
 }
 
-function check_seen_movie($user_id, $movie_id)
+function getUsers()
 {
-    $conn = connect_to_db();
-    $query = $conn->prepare('select * from proyecto_SI.ratings where userID like ? and movieID like ?');
-    $query->bind_param('ii', $user_id, $movie_id);
-    $query->execute();
-    $query_result = $query->get_result();
-    $dict = [
-        'status' => false,
-        'rating' => 0,
-    ];
-    if ($query_result->num_rows > 0) {
-        while ($row = $query_result->fetch_assoc()) {
-            $dict['status'] = true;
-            $dict['rating'] = $row['rating'];
+    $con = connect_to_db();
+    $list = array();
+    $query = 'SELECT * FROM proyecto_SI.user_global_mean';
+    $result = $con->query($query);
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $list[] = $row['user_id'];
         }
     }
-    return $dict;
+    return $list;
 }
 
-function make_single_prediction($movie_id, $neighbours)
+function insert_users_in_ComboBox()
 {
-    $movie_status = check_seen_movie($neighbours['user1'], $movie_id);
-    if ($movie_status['status']) {
-        $max = count($neighbours['user_id']);
-        $numerator = 0;
-        $denominator = 0;
-        $original_user = $neighbours['user1'];
-        $original_user_mean = get_user_global_mean($original_user);
-        for ($i = 0; $i < $max; $i++) {
-            $user_id = $neighbours['user_id'][$i];
-            $user_similitude = $neighbours['similitude'][$i];
-            $movie_rating = get_user_movie_rating($user_id, $movie_id);
-            if ($movie_rating >= 0) {
-                $mean = get_user_global_mean($user_id);
-                $numerator += $user_similitude * ($movie_rating - $mean);
-                $denominator += $user_similitude;
-            }
-        }
-        if ($denominator > 0) {
-            $prediction = $original_user_mean + ($numerator / $denominator);
-            $movie_status['rating'] = $prediction;
-        }
-        return $movie_status;
+    $user_global_mean = getUsers();
+    $id = 1;
+    foreach ($user_global_mean as $user_global_mean) {
+        echo '<option id=' . $id . '>' . $user_global_mean . '</option>\n';
+        $id++;
     }
-    return $movie_status;
 }
