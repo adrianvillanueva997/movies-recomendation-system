@@ -9,12 +9,29 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="jquery-1.3.2.min.js" type="text/javascript"></script>
 
     <link rel="stylesheet" href="css/Principal.css">
+
+    <script language="JavaScript" type="text/JavaScript">
+        function envia(obj){
+            if(
+            (parseInt(document.getElementById("valor1").value,10)<parseInt(document.getElementById("valor2").value,10))
+            && !isNaN(parseInt(document.getElementById("valor1").value,10))
+            && !isNaN(parseInt(document.getElementById("valor2").value,10))
+            ){
+             obj.submit();
+            }else{
+            alert("El valor de la derecha debe ser mayor que el de la izquierda");
+            }
+            }
+    </script>
 </head>
+
 <body>
 <?php
 include 'PHP/user-user.php';
+include 'PHP/movies.php';
 ?>
 
 
@@ -22,8 +39,8 @@ include 'PHP/user-user.php';
 <nav>
     <ul>
         <li><a href=index.html>Home</a></li>
-        <li><a class="active" href="recomendarUsuarios.php">Recomendar a usuarios</a></li>
-        <li><a href="misRecomendaciones.php">Mis recomendaciones</a></li>
+        <li><a class="active" href="recom-user-user.php">User-User</a></li>
+        <li><a href="recom-item-item.php">Ítem-Ítem</a></li>
     </ul>
 </nav>
 
@@ -34,44 +51,39 @@ include 'PHP/user-user.php';
     <div class="row">
         <div class="col-md-4">
 
-            <form class=recomendar action="search.php" method="get">
+            <form class=recomendar action="search.php" method="post" target="_blank">
                 <p> Umbral de similitud:
-                    <input type="search" size="2" required="required"><br><br>
-                    <button type="submit" class="boton_personalizado">Recomendar</button>
+                    <input type="number" name="valor1" id="valor1" placeholder="Ej. 0.6" min="0" max="1" step="0.05" required="required">
+                    - 
+                    <input type="number" name="valor2" id="valor2" placeholder="Ej. 0.85" min="0" max="1" step="0.05" required="required">
+                    <br><br> <button type="submit" onClick="envia(this)" class="boton_personalizado">Recomendar</button>
                 </p>
+            </form>
         </div>
 
         <div class="col-md-4">
             <form action="../../form-result.php" target="_blank">
                 <p> Items de ranking:
-                    <select name="Items">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                        <option>6</option>
-                        <option>7</option>
-                        <option>8</option>
-                        <option>9</option>
-                        <option>10</option>
-                    </select>
+                <input type="number" name="numero" placeholder="Ej. 5"  min="1" max="50" step="1" required="required">
                 </p>
             </form>
         </div>
 
         <div class="col-md-4">
             <form action="../../form-result.php" target="_blank">
-                <p> Seleccione un usuario:
-                    <select name="Usuario">
-                        <option>usuario1</option>
-                        <option>usuario2</option>
-                    </select>
+                <p> 
+                    <input list="states" name="state-choice" placeholder=" Seleccione un usuario"/>
+                       <datalist id="states">
+                            <option>Seleccione una opción</option>
+                            <?php insert_users_in_ComboBox() ?>
+                        </datalist>
                 </p>
             </form>
         </div>
+
     </div>
 </div>
+
 
 <h2 align="center">Vecinos</h2>
 <h3>
@@ -117,10 +129,12 @@ include 'PHP/user-user.php';
 
         <div class="col-md-4">
             <form class=recomendar action="search.php" method="get">
-                <p> Selecciona un usuario:
-                    <select name="Usuarios">
-                        <option>Usuario1</option>
-                    </select>
+                <p> 
+                    <input list="states" name="state-choice" placeholder=" Seleccione un usuario"/>
+                       <datalist id="states">
+                            <option>Seleccione una opción</option>
+                            <?php insert_users_in_ComboBox() ?>
+                        </datalist>
                 </p>
                 <br><b>Predicción: 3.5 </b>
             </form>
@@ -128,10 +142,12 @@ include 'PHP/user-user.php';
 
         <div class="col-md-4">
             <form action="../../form-result.php" target="_blank">
-                <p> Selecciona una película:
-                    <select name="Peliculas">
-                        <option>Bambi</option>
-                    </select>
+                <p> 
+                     <input list="states" name="state-choice" placeholder=" Buscador de películas"/>
+                       <datalist id="states">
+                            <option>Seleccione una opción</option>
+                            <?php insert_movies_in_ComboBox() ?>
+                        </datalist>
                     <br><br>
                     <button type="submit" class="boton_personalizado">Predecir</button>
                 </p>
@@ -144,12 +160,11 @@ include 'PHP/user-user.php';
     </div>
 </div>
 
-
 <br>
 <footer>
     <div class=footer align="center"><br>
         <p> Recomendador creado por <a href="https://github.com/adrianvillanueva997"> Adrián Villanueva </a> y <a
-                    href="https://github.com/adrianvillanueva997"> Laura Vizcaíno, </a> derechos reservados &copy; </p>
+                    href="https://github.com/laura3797"> Laura Vizcaíno, </a> derechos reservados &copy; </p>
         <br>
     </div>
 </footer>

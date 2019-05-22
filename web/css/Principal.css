@@ -90,6 +90,10 @@ color:black;
 text-decoration:none;
 }
 
+input[type="number"] {
+   width: 10px;
+}
+
 .footer {
   background-color: #2874A6;
   color: white;

@@ -21,10 +21,11 @@
 <nav>
     <ul>
         <li><a href=index.html>Home</a></li>
-        <li><a href="recomendarUsuarios.php">Recomendar a usuarios</a></li>
-        <li><a class="active" href="misRecomendaciones.php">Mis recomendaciones</a></li>
+        <li><a href="recom-user-user.php">User-User</a></li>
+        <li><a class="active" href="recom-item-item.php">Ítem-Ítem</a></li>
     </ul>
 </nav>
+
 
 <!--
 <?php
@@ -37,68 +38,41 @@ include_once 'PHP/user-user.php';
     <h2> Valoraciones del Usuario 0</h2> <br>
 
     <div class="align center">
-        <div class="col-md-1">
+        <div class="col-md-3">
         </div>
 
-        <div class="col-md-7">
+        <div class="col-md-4">
             <form action="../../form-result.php" target="_blank">
-                <p> Selecciona una película:
-                    <label>
-                        <select name="Peliculas">
+                <p> 
+                     <input list="states" name="state-choice" placeholder=" Buscador de películas"/>
+                       <datalist id="states">
                             <option>Seleccione una opción</option>
                             <?php insert_movies_in_ComboBox() ?>
-                        </select>
-                    </label>
-
-                    <br><br>
+                        </datalist>
+                </p>
 
                     Valoración:
-                    <label>
-                        <select name="Valoraciones">
-                            <?php ?>
-                            <option>0</option>
-                            <option>0,5</option>
-                            <option>1</option>
-                            <option>1,5</option>
-                            <option>2</option>
-                            <option>2,5</option>
-                            <option>3</option>
-                            <option>3,5</option>
-                            <option>4</option>
-                            <option>4,5</option>
-                            <option>5</option>
-                        </select>
-                    </label>
-                </p>
+                    <input type="number" class="numero" placeholder="Ej. 3.5" min="0" max="5" step="0.5" required="required"> <br><br>
+
                 <button type="submit" class="boton_personalizado">Votar</button>
                 <br><br>
             </form>
         </div>
 
-
-        <div class="col-md-3">
+       <div class="col-md-4">
             <form action="../../form-result.php" target="_blank">
-                Umbral de similitud:
-                <input type="search" size="2" required="required"><br><br>
-                Ítems de ranking:
-                <select name="Items">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                    <option>6</option>
-                    <option>7</option>
-                    <option>8</option>
-                    <option>9</option>
-                    <option>10</option>
-                </select>
-                <br><br>
+                 <p> Umbral de similitud:
+                    <input type="number" name="valor1" id="valor1" placeholder="Ej. 0.6" min="0" max="1" step="0.05" required="required">
+                    - 
+                    <input type="number" name="valor2" id="valor2" placeholder="Ej. 0.85" min="0" max="1" step="0.05" required="required">
+                </p>
+                 <p> Items de ranking:
+                <input type="number" name="numero" placeholder="Ej. 5"  min="1" max="50" step="1" required="required">
+                </p>
                 <button type="submit" class="boton_personalizado">Calcular ranking</button>
             </form>
-
-
         </div>
+
     </div>
 </div>
 
@@ -107,17 +81,26 @@ include_once 'PHP/user-user.php';
 <h2 align="center"> Ranking</h2>
 <h3>
     <table align="center" border=2>
-        <tr>
-            <th>ID ÍTEM</th>
-            <th>PREDICCIÓN</th>
+       <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Predicción</th>
+            <th>Link</th>
+
         </tr>
         <tr align="center">
             <td>12</td>
-            <td>1.5</td>
+            <td>Toy Story</td>
+            <td>0.9</td>
+            <td>bla bla bla</td>
+
         </tr>
         <tr align="center">
-            <td>2</td>
-            <td>4</td>
+            <td>9</td>
+            <td>Spiderman</td>
+            <td>0.75</td>
+            <td>bla bla bla</td>
+        </tr>
     </table>
 </h3>
 
@@ -129,26 +112,28 @@ include_once 'PHP/user-user.php';
 <div class="container">
     <div class="row">
 
-        <div class="col-md-1">
+        <div class="col-md-3">
         </div>
 
-        <div class="col-md-6">
-            <form action="../../form-result.php" target="_blank">
-                <p> Selecciona una película:
-                    <select name="Pelicula">
-                        <option>Seleccione una opción</option>
-                        <option>Bambi</option>
-                    </select>
+        <div class="col-md-4">
+            <form class=recomendar action="search.php" method="get">
+                <p> 
+                    <input list="states" name="state-choice" placeholder=" Buscador de películas"/>
+                       <datalist id="states">
+                            <option>Seleccione una opción</option>
+                            <?php insert_movies_in_ComboBox() ?>
+                        </datalist>
                 </p>
-                <br><b>Predicción: 3.5</b>
+                <br><b>Predicción: 3.5 </b>
             </form>
         </div>
 
         <div class="col-md-4">
             <button type="submit" class="boton_personalizado">Predecir</button>
+        </div>
 
-            <div class="col-md-1">
-            </div>
+        <div class="col-md-1">
+        </div>
 
         </div>
     </div>
