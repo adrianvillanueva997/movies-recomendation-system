@@ -24,7 +24,7 @@ engine = create_engine(URL(**db_url), encoding='utf-8')
 
 
 def sleep():
-    time.sleep(0.001)
+    time.sleep(0.1)
 
 
 def create_cos_corr_table():
@@ -91,7 +91,8 @@ def calculate_movies_mean_count(i):
 
 def get_most_rated_movies():
     with engine.connect() as conn:
-        query = text('select * from proyecto_SI.movies_mean_count where rating_count >=35')
+        query = text(
+            'select * from proyecto_SI.movies_mean_count where rating_count >=50')
         results = conn.execute(query)
         movie_ids = []
         for result in results:
@@ -112,23 +113,27 @@ def calculate_cos_similitude(x_1, x_2):
 def insert_cos_similitude(i, similitude_movies):
     sleep()
     with engine.connect() as conn:
-        user_i_mean_query = text('select mean from proyecto_SI.user_global_mean where user_id like :_user_id')
+        user_i_mean_query = text(
+            'select mean from proyecto_SI.user_global_mean where user_id like :_user_id')
         movie_1_ratings_query = text('select rating from proyecto_SI.ratings '
                                      'where userID like :_user_id')
-        movie_2_ratings_query = text('select rating from proyecto_SI.ratings where movieID like :_movie_id')
+        movie_2_ratings_query = text(
+            'select rating from proyecto_SI.ratings where movieID like :_movie_id')
         insert_similitude_query = text('insert into proyecto_SI.sim_cos '
                                        '(user_id_1, movie_id_1, movie_id_2, cos_correlation) '
                                        'values (:_user_id,:_movie_1_id,:_movie_2_id,:_similitude)')
         mean_result = conn.execute(user_i_mean_query, _user_id=i)
         mean = mean_result.first()[0]
         for j in range(len(similitude_movies)):
-            movie_1_ratings_results = conn.execute(movie_1_ratings_query, _movie_id=similitude_movies[j], _user_id=i)
+            movie_1_ratings_results = conn.execute(
+                movie_1_ratings_query, _movie_id=similitude_movies[j], _user_id=i)
             movie_1_ratings = []
             for result in movie_1_ratings_results:
                 movie_1_ratings.append(mean - result['rating'])
-            for k in range(len(similitude_movies)):
+            for k in range(j, len(similitude_movies)):
                 if j != k:
-                    movie_2_ratings_results = conn.execute(movie_2_ratings_query, _movie_id=similitude_movies[k])
+                    movie_2_ratings_results = conn.execute(
+                        movie_2_ratings_query, _movie_id=similitude_movies[k])
                     movie_2_ratings = []
                     for result in movie_2_ratings_results:
                         movie_2_ratings.append(mean - result['rating'])
@@ -143,9 +148,8 @@ def insert_cos_similitude(i, similitude_movies):
                         conn.execute(insert_similitude_query, _user_id=i, _movie_1_id=similitude_movies[j],
                                      _movie_2_id=similitude_movies[k],
                                      _similitude=similitude)
-                        logging.info(f'Calculated similitude for user {i} '
-                                     f'for movie {similitude_movies[j]} on {similitude_movies[k]}'
-                                     f' similitude {similitude}')
+                        logging.info(f'similitude for user {i} '
+                                     f'for movie {similitude_movies[j]} on {similitude_movies[k]}')
 
 
 if __name__ == '__main__':
@@ -159,9 +163,11 @@ if __name__ == '__main__':
     user_count = get_all_user_count()
     movies_count = get_movies_count()
     similitude_movies = get_most_rated_movies()
-    # with ThreadPoolExecutor(max_workers=128) as executor:
-    #    for i in range(1, movies_count):
-    #        a = executor.submit(calculate_movies_mean_count, i)
+    similitude_movies.sort()
+    print(len(similitude_movies))
+    print(similitude_movies)
+    i = 286
     with ThreadPoolExecutor(max_workers=128) as executor:
-        for j in range(1, user_count):
-            a = executor.submit(insert_cos_similitude, j, similitude_movies)
+        while i < user_count:
+            i += 1
+            a = executor.submit(insert_cos_similitude, i, similitude_movies)

@@ -48,15 +48,17 @@ def create_user_data_table():
     """
     with engine.connect() as conn:
         query = text("""
-        create table if not exists proyecto_SI.user_global_mean(
-            user_id int    not null,
-            mean    double null,
-            constraint user_global_mean_user_id_uindex
-                unique (user_id)
-        );
-        alter table proyecto_SI.user_global_mean
-            add primary key (user_id)
-            """)
+    create table if not exists  proyecto_SI.user_global_mean
+    (
+    user_id      int    not null,
+    mean         double null,
+    rating_count int    null,
+    constraint user_global_mean_user_id_uindex
+        unique (user_id)
+    );
+    alter table user_global_mean
+        add primary key (user_id);
+                """)
         conn.execute(query)
 
 
@@ -68,9 +70,10 @@ def calculate_global_user_mean(i, user_count):
     """
     sleep()
     with engine.connect() as conn:
-        query = text('insert into proyecto_SI.user_global_mean (user_id, mean) '
+        query = text('insert into proyecto_SI.user_global_mean (user_id, mean,rating_count ) '
                      'values (:_user_id, (select avg(proyecto_SI.ratings.rating) '
-                     'from proyecto_SI.ratings where userID like :_user_id));')
+                     'from proyecto_SI.ratings where userID like :_user_id),'
+                     '(select distinct count(userID) from proyecto_SI.ratings where userID like :_user_id))')
         conn.execute(query, _user_id=i)
         logging.info(f'Calculated: {i} of {user_count}')
 
@@ -186,53 +189,6 @@ def get_similar_movies_ratings(i, user_count):
                         f'Calculated similitude between users {i} and {j}')
 
 
-def create_cos_corr_table():
-    with engine.connect() as conn:
-        query = text("""
-        create table if not exists sim_cos
-        (
-        id int auto_increment primary key,
-        user_id_1       int    null,
-        movie_id_1      int    null,
-        movie_id_2      int    null,
-        cos_correlation double null
-        );
-        """)
-        conn.execute(query)
-
-
-def calculate_cos_correlation(i, user_count):
-    sleep()
-    with engine.connect() as conn:
-        query = text('select * from proyecto_SI.ratings where userID like :_user_id1'
-                     ' and proyecto_SI.ratings.movieID in '
-                     '(select movieID from proyecto_SI.ratings '
-                     'where userID like :_user_id2)')
-        for j in range(1, user_count):
-            if i != j:
-                logging.info(f'Calculating user: {i} on user {j}')
-                result_1 = conn.execute(query, _user_id1=i, _user_id2=j)
-                result_2 = conn.execute(query, _user_id1=j, _user_id2=i)
-                ratings_list1 = []
-                ratings_list2 = []
-                for result in result_1:
-                    ratings_list1.append(result['rating'])
-                for result in result_2:
-                    ratings_list2.append(result['rating'])
-                numerator = 0
-                denominator_1 = 0
-                denominator_2 = 0
-                if len(ratings_list1) > 0:
-                    for k in range(0, len(ratings_list1)):
-                        numerator += (ratings_list1[k] * ratings_list2[k])
-                        denominator_1 += ratings_list1[k] * ratings_list1[k]
-                        denominator_2 += ratings_list2[k] * ratings_list2[k]
-
-                    similitude = numerator / \
-                                 (sqrt(denominator_1) * sqrt(denominator_2))
-                    print(similitude)
-
-
 if __name__ == '__main__':
     logging.info('Creating user global means table')
     create_user_data_table()
@@ -247,16 +203,16 @@ if __name__ == '__main__':
             logging.debug("Task Executed {}".format(
                 threading.current_thread()))
     logging.debug(f'Creating user_user mean table')
-    create_user_user_mean()
+    # create_user_user_mean()
     logging.info(f'Table user_user created successfully')
     logging.info('Calculating user to user mean')
-    with ThreadPoolExecutor(max_workers=128) as executor:
-        for i in range(1, user_count):
-            a = executor.submit(calculate_user_to_user_mean, i, user_count)
+    # with ThreadPoolExecutor(max_workers=128) as executor:
+    #    for i in range(1, user_count):
+    #        a = executor.submit(calculate_user_to_user_mean, i, user_count)
     logging.info('Creating similitude Table')
     create_similitude_table()
     logging.debug('Similitude table created successfully')
-    with ThreadPoolExecutor(max_workers=128) as executor:
-        for i in range(1, user_count):
-            a = executor.submit(get_similar_movies_ratings, i, user_count)
+    # with ThreadPoolExecutor(max_workers=128) as executor:
+    #    for i in range(1, user_count):
+    #        a = executor.submit(get_similar_movies_ratings, i, user_count)
     logger.info('Creating Cos correlation table')

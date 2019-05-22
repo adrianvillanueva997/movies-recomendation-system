@@ -1,28 +1,7 @@
 <?php
 include_once 'database.php';
 include_once 'utilities.php';
-
-/**
- * Function that gets the user1 mean related to the user 2 from the Database
- * @param $id_user1
- * @param $id_user2
- * @return int
- */
-function get_user_user_mean($id_user1, $id_user2)
-{
-    $con = connect_to_db();
-    $query = $con->prepare('SELECT * FROM proyecto_SI.user_mean where id_user1 like ? and id_user2 like ?;');
-    $query->bind_param('ii', $id_user1, $id_user2);
-    $result = $con->query($query);
-    $mean = 0;
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $mean = $row['mean'];
-        }
-    }
-    return $mean;
-}
-
+include_once 'common.php';
 /**
  * Function that returns the neighbours from an user
  * @param $user1
@@ -31,7 +10,7 @@ function get_user_user_mean($id_user1, $id_user2)
  * @param $result_limit
  * @return array
  */
-function get_neighbours($user1, $correlation_limit_1, $correlation_limit_2, $result_limit)
+function user_get_neighbours($user1, $correlation_limit_1, $correlation_limit_2, $result_limit)
 {
     $con = connect_to_db();
     $query = $con->prepare('select user_id_2,pearson_corr from proyecto_SI.similitude where user_id_1 = ? and pearson_corr >= ? 
@@ -73,7 +52,7 @@ function print_neighbours($neighbour_dict)
  * @param $neighbour_dict
  * @return array
  */
-function get_unseen_movies($neighbour_dict)
+function user_get_unseen_movies($neighbour_dict)
 {
     $con = connect_to_db();
     $unseen_movies_query = $con->prepare('select * from proyecto_SI.ratings where userID = ?
@@ -111,78 +90,13 @@ function get_unseen_movies($neighbour_dict)
 }
 
 /**
- * Function to get the user global mean
- * @param $user_id
- * @return int
- */
-function get_user_global_mean($user_id)
-{
-    $con = connect_to_db();
-    $global_user_mean_query = $con->prepare('select * from proyecto_SI.user_global_mean where user_id like ?');
-    $global_user_mean_query->bind_param('i', $user_id);
-    $global_user_mean_query->execute();
-    $global_user_mean_result = $global_user_mean_query->get_result();
-    $mean = 0;
-    if ($global_user_mean_result->num_rows > 0) {
-        while ($row = $global_user_mean_result->fetch_assoc()) {
-            $mean = $row['mean'];
-        }
-    }
-    return $mean;
-}
-
-/**
- * Function to get the movie ratings from an user
- * @param $id_user
- * @param $movie_id
- * @return int
- */
-function get_user_movie_rating($id_user, $movie_id)
-{
-    $con = connect_to_db();
-    $rating_user_query = $con->prepare('select * from proyecto_SI.ratings where movieID like ? and userID like ?');
-    $rating_user_query->bind_param('ii', $movie_id, $id_user);
-    $rating_user_query->execute();
-    $result = $rating_user_query->get_result();
-    $rating = -1;
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $rating = $row['rating'];
-        }
-    }
-    return $rating;
-
-}
-
-/**
- * Function to get the movie name from a movie ID
- * @param $movie_id
- * @return string
- */
-function get_movie_name($movie_id)
-{
-    $con = connect_to_db();
-    $global_user_mean_query = $con->prepare('select * from proyecto_SI.movies where movieID like ?');
-    $global_user_mean_query->bind_param('i', $movie_id);
-    $global_user_mean_query->execute();
-    $global_user_mean_result = $global_user_mean_query->get_result();
-    $movie_name = '';
-    if ($global_user_mean_result->num_rows > 0) {
-        while ($row = $global_user_mean_result->fetch_assoc()) {
-            $movie_name = $row['title'];
-        }
-    }
-    return $movie_name;
-}
-
-/**
  * Function that makes the top ranking of predictions for user x
  * @param $unseen_movies
  * @param $neighbours
  * @param $top_items
  * @return array
  */
-function make_ranking($unseen_movies, $neighbours, $top_items)
+function user_make_ranking($unseen_movies, $neighbours, $top_items)
 {
     $ranking = [
         'movie_id' => [],
@@ -238,27 +152,8 @@ function print_ranking($ranking)
     }
 }
 
-function check_seen_movie($user_id, $movie_id)
-{
-    $conn = connect_to_db();
-    $query = $conn->prepare('select * from proyecto_SI.ratings where userID like ? and movieID like ?');
-    $query->bind_param('ii', $user_id, $movie_id);
-    $query->execute();
-    $query_result = $query->get_result();
-    $dict = [
-        'status' => false,
-        'rating' => 0,
-    ];
-    if ($query_result->num_rows > 0) {
-        while ($row = $query_result->fetch_assoc()) {
-            $dict['status'] = true;
-            $dict['rating'] = $row['rating'];
-        }
-    }
-    return $dict;
-}
 
-function make_single_prediction($movie_id, $neighbours)
+function user_make_single_prediction($movie_id, $neighbours)
 {
     $movie_status = check_seen_movie($neighbours['user1'], $movie_id);
     if ($movie_status['status']) {

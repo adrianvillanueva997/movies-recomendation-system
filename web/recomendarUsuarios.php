@@ -82,7 +82,7 @@ include 'PHP/user-user.php';
         </tr>
         <?php
         #usuario, limite 1, limite 2, limite de resultados
-        $neighbours = get_neighbours(1, 0.8, 1, 5);
+        $neighbours = user_get_neighbours(1, 0.8, 1, 5);
         print_neighbours($neighbours);
         ?>
     </table>
