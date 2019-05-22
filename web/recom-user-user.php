@@ -80,6 +80,7 @@ include 'PHP/movies.php';
                 </p>
             </form>
         </div>
+
     </div>
 </div>
 

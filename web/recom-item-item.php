@@ -20,7 +20,7 @@
 
 <nav>
     <ul>
-        <li><a href=recomendador.html>Home</a></li>
+        <li><a href=index.html>Home</a></li>
         <li><a href="recom-user-user.php">User-User</a></li>
         <li><a class="active" href="recom-item-item.php">Ítem-Ítem</a></li>
     </ul>
@@ -38,23 +38,21 @@ include_once 'PHP/user-user.php';
     <h2> Valoraciones del Usuario 0</h2> <br>
 
     <div class="align center">
-        <div class="col-md-1">
+        <div class="col-md-3">
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
             <form action="../../form-result.php" target="_blank">
-                <p> Selecciona una película:
-                    <label>
-                        <select name="Peliculas">
+                <p> 
+                     <input list="states" name="state-choice" placeholder=" Buscador de películas"/>
+                       <datalist id="states">
                             <option>Seleccione una opción</option>
                             <?php insert_movies_in_ComboBox() ?>
-                        </select>
-                    </label>
-
-                    <br><br>
+                        </datalist>
+                </p>
 
                     Valoración:
-                    <input type="number" placeholder="Ej. 3.5" min="0" max="5" step="0.5" required="required"> <br><br>
+                    <input type="number" class="numero" placeholder="Ej. 3.5" min="0" max="5" step="0.5" required="required"> <br><br>
 
                 <button type="submit" class="boton_personalizado">Votar</button>
                 <br><br>
@@ -63,10 +61,14 @@ include_once 'PHP/user-user.php';
 
        <div class="col-md-4">
             <form action="../../form-result.php" target="_blank">
-                Umbral de similitud:
-                <input type="search" size="2" required="required"><br><br>
-                 Ítems del ranking:
-                <input type="search" maxlength="2" size="2" required="required"><br><br>
+                 <p> Umbral de similitud:
+                    <input type="number" name="valor1" id="valor1" placeholder="Ej. 0.6" min="0" max="1" step="0.05" required="required">
+                    - 
+                    <input type="number" name="valor2" id="valor2" placeholder="Ej. 0.85" min="0" max="1" step="0.05" required="required">
+                </p>
+                 <p> Items de ranking:
+                <input type="number" name="numero" placeholder="Ej. 5"  min="1" max="50" step="1" required="required">
+                </p>
                 <button type="submit" class="boton_personalizado">Calcular ranking</button>
             </form>
         </div>
@@ -110,26 +112,28 @@ include_once 'PHP/user-user.php';
 <div class="container">
     <div class="row">
 
-        <div class="col-md-1">
+        <div class="col-md-3">
         </div>
 
-        <div class="col-md-6">
-            <form action="../../form-result.php" target="_blank">
-                <p> Selecciona una película:
-                    <select name="Pelicula">
-                        <option>Seleccione una opción</option>
-                        <option>Bambi</option>
-                    </select>
+        <div class="col-md-4">
+            <form class=recomendar action="search.php" method="get">
+                <p> 
+                    <input list="states" name="state-choice" placeholder=" Buscador de películas"/>
+                       <datalist id="states">
+                            <option>Seleccione una opción</option>
+                            <?php insert_movies_in_ComboBox() ?>
+                        </datalist>
                 </p>
-                <br><b>Predicción: 3.5</b>
+                <br><b>Predicción: 3.5 </b>
             </form>
         </div>
 
         <div class="col-md-4">
             <button type="submit" class="boton_personalizado">Predecir</button>
+        </div>
 
-            <div class="col-md-1">
-            </div>
+        <div class="col-md-1">
+        </div>
 
         </div>
     </div>
