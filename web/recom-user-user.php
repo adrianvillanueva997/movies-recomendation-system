@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <title>Recomendador de usuarios</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta http-equiv=”Content-Language” content=”es”>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta http-equiv=“refresh” content=“30”>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -29,6 +29,7 @@
 </head>
 
 <body>
+
 <?php
 include 'PHP/user-user.php';
 include 'PHP/movies.php';
@@ -41,6 +42,7 @@ include 'PHP/movies.php';
         <li><a href=index.html>Home</a></li>
         <li><a class="active" href="recom-user-user.php">User-User</a></li>
         <li><a href="recom-item-item.php">Ítem-Ítem</a></li>
+        <li><a href="valoraciones.php">Valoraciones</a></li>
     </ul>
 </nav>
 
@@ -160,12 +162,11 @@ include 'PHP/movies.php';
     </div>
 </div>
 
+
 <br>
 <footer>
-    <div class=footer align="center"><br>
-        <p> Recomendador creado por <a href="https://github.com/adrianvillanueva997"> Adrián Villanueva </a> y <a
-                    href="https://github.com/laura3797"> Laura Vizcaíno, </a> derechos reservados &copy; </p>
-        <br>
+    <div class=footer align="center">
+        <p> Recomendador creado por <a class="linkFooter" href="https://github.com/adrianvillanueva997"> Adrián Villanueva </a> y <a class="linkFooter" href="https://github.com/laura3797""> Laura Vizcaíno</a>, derechos reservados &copy; </p>
     </div>
 </footer>
 
