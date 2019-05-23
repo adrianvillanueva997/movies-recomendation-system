@@ -180,27 +180,3 @@ function user_make_single_prediction($movie_id, $neighbours)
     }
     return $movie_status;
 }
-
-function getUsers()
-{
-    $con = connect_to_db();
-    $list = array();
-    $query = 'SELECT * FROM proyecto_SI.user_global_mean';
-    $result = $con->query($query);
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $list[] = $row['user_id'];
-        }
-    }
-    return $list;
-}
-
-function insert_users_in_ComboBox()
-{
-    $user_global_mean = getUsers();
-    $id = 1;
-    foreach ($user_global_mean as $user_global_mean) {
-        echo '<option id=' . $id . '>' . $user_global_mean . '</option>\n';
-        $id++;
-    }
-}
