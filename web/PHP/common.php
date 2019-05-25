@@ -181,29 +181,27 @@ function make_external_urls($movie_id)
     $query->bind_param('i', $movie_id);
     $query->execute();
     $result = $query->get_result();
-    $imdb_id = '';
-    $tmdb_id = '';
+    $imdb_id = ['https://www.imdb.com/title/tt'];
+    $tmdb_id = ['https://www.themoviedb.org/movie/'];
     $urls = [
         'imdb' => '',
         'tmdb' => ''
     ];
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            $tmdb_id = $row['tmdbID'];
-            $imdb_id = $row['imdbID'];
+            $tmdb_id[] = $row['tmdbID'];
+            $imdb_id[] = $row['imdbID'];
         }
     }
-    $base_imdb_url = 'https://www.imdb.com/title/tt';
-    $base_tmdb_url = 'https://www.themoviedb.org/movie/';
-    $urls['imdb'] = $base_imdb_url . $imdb_id;
-    $urls['tmdb'] = $base_tmdb_url . $tmdb_id;
+    $urls['imdb'] = implode('', $imdb_id);
+    $urls['tmdb'] = implode('', $tmdb_id);
     return $urls;
 }
 
 function get_movie_tags($movie_id)
 {
     $con = connect_to_db();
-    $rating_user_query = $con->prepare('select tag from proyecto_SI.tags where movieID like ?');
+    $rating_user_query = $con->prepare('select distinct tag from proyecto_SI.tags where movieID like ?');
     $rating_user_query->bind_param('i', $movie_id);
     $rating_user_query->execute();
     $result = $rating_user_query->get_result();
@@ -215,3 +213,13 @@ function get_movie_tags($movie_id)
     }
     return $tags;
 }
+
+function scrape_imdb_img($movie_id)
+{
+    $movie_url = make_external_urls($movie_id);
+    $output = shell_exec('python3 imdb_scrapper.py ' . $movie_url['imdb']);
+    return $output;
+}
+
+scrape_imdb_img(1);
+
