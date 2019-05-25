@@ -8,21 +8,6 @@ include_once 'common.php';
  * @param $id_user2
  * @return int
  */
-function get_user_user_mean($id_user1, $id_user2)
-{
-    $con = connect_to_db();
-    $query = $con->prepare('SELECT * FROM proyecto_SI.user_mean where id_user1 like ? and id_user2 like ?;');
-    $query->bind_param('ii', $id_user1, $id_user2);
-    $result = $con->query($query);
-    $mean = 0;
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $mean = $row['mean'];
-        }
-    }
-    return $mean;
-}
-
 /**
  * Function that returns the neighbours from an user
  * @param $user1

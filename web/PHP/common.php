@@ -205,21 +205,20 @@ function get_movie_tags($movie_id)
     $rating_user_query->bind_param('i', $movie_id);
     $rating_user_query->execute();
     $result = $rating_user_query->get_result();
-    $tags = [];
+    $tags_arr = [];
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            $tags[] = $row['tag'];
+            $tags_arr[] = $row['tag'];
         }
     }
+    $tags = implode(', ', $tags_arr);
     return $tags;
 }
 
 function scrape_imdb_img($movie_id)
 {
     $movie_url = make_external_urls($movie_id);
-    $output = shell_exec('python3 imdb_scrapper.py ' . $movie_url['imdb']);
+    $output = shell_exec('python3 python_scripts/imdb_scrapper.py ' . $movie_url['imdb']);
     return $output;
 }
-
-scrape_imdb_img(1);
 

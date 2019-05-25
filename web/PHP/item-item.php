@@ -23,7 +23,8 @@ function item_get_unseen_movies($userID)
 function get_movie_correlation($movie_id, $correlation_limit_1, $correlation_limit_2, $maxItems)
 {
     $con = connect_to_db();
-    $rating_count_query = $con->prepare('select cos_correlation from proyecto_SI.sim_cos where movie_id_1 like ? and cos_correlation>=? and cos_correlation <= ? order by cos_correlation DESC limit ?');
+    $rating_count_query = $con->prepare('select cos_correlation from proyecto_SI.sim_cos where movie_id_1 like ? 
+                                                  and cos_correlation>=? and cos_correlation <= ? order by cos_correlation DESC limit ?');
     $rating_count_query->bind_param('iddi', $movie_id, $correlation_limit_1, $correlation_limit_2, $maxItems);
     $rating_count_query->execute();
     $result = $rating_count_query->get_result();
