@@ -10,7 +10,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="jquery-1.3.2.min.js" type="text/javascript"></script>
-
+    <link rel="shortcut icon" type="image/png" href="images/icon.png"/>
     <link rel="stylesheet" href="css/Principal.css">
 
     <script language="JavaScript" type="text/JavaScript">

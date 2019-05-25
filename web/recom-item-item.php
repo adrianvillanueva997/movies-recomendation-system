@@ -5,7 +5,7 @@
     <meta http-equiv=”Content-Language” content=”es”>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta http-equiv=“refresh” content=“30”>
-    
+    <link rel="shortcut icon" type="image/png" href="images/icon.png"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link href="css/star-rating.css" rel="stylesheet">
 

@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link href="css/star-rating.css" rel="stylesheet">
-
+    <link rel="shortcut icon" type="image/png" href="images/icon.png"/>
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <link href="http://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet"/>
     <script src="js/starrr.js"></script>
