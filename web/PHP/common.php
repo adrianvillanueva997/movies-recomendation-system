@@ -12,7 +12,7 @@ include_once 'utilities.php';
 function get_user_user_mean($id_user1, $id_user2)
 {
     $con = connect_to_db();
-    $query = $con->prepare('SELECT * FROM proyecto_SI.user_mean where id_user1 like ? and id_user2 like ?;');
+    $query = $con->prepare('SELECT mean FROM proyecto_SI.user_mean where id_user1 like ? and id_user2 like ?;');
     $query->bind_param('ii', $id_user1, $id_user2);
     $result = $con->query($query);
     $mean = 0;
@@ -32,7 +32,7 @@ function get_user_user_mean($id_user1, $id_user2)
 function get_user_global_mean($user_id)
 {
     $con = connect_to_db();
-    $global_user_mean_query = $con->prepare('select * from proyecto_SI.user_global_mean where user_id like ?');
+    $global_user_mean_query = $con->prepare('select mean from proyecto_SI.user_global_mean where user_id like ?');
     $global_user_mean_query->bind_param('i', $user_id);
     $global_user_mean_query->execute();
     $global_user_mean_result = $global_user_mean_query->get_result();
@@ -53,7 +53,7 @@ function get_user_global_mean($user_id)
 function get_movie_name($movie_id)
 {
     $con = connect_to_db();
-    $global_user_mean_query = $con->prepare('select * from proyecto_SI.movies where movieID like ?');
+    $global_user_mean_query = $con->prepare('select title from proyecto_SI.movies where movieID like ?');
     $global_user_mean_query->bind_param('i', $movie_id);
     $global_user_mean_query->execute();
     $global_user_mean_result = $global_user_mean_query->get_result();
@@ -75,7 +75,7 @@ function get_movie_name($movie_id)
 function check_seen_movie($user_id, $movie_id)
 {
     $conn = connect_to_db();
-    $query = $conn->prepare('select * from proyecto_SI.ratings where userID like ? and movieID like ?');
+    $query = $conn->prepare('select rating from proyecto_SI.ratings where userID like ? and movieID like ?');
     $query->bind_param('ii', $user_id, $movie_id);
     $query->execute();
     $query_result = $query->get_result();
@@ -123,7 +123,7 @@ function get_user_movie_rating($id_user, $movie_id)
 function get_user_ratings($id_user)
 {
     $con = connect_to_db();
-    $rating_user_query = $con->prepare('select * from proyecto_SI.ratings where userID like ?');
+    $rating_user_query = $con->prepare('select rating,movieID from proyecto_SI.ratings where userID like ?');
     $rating_user_query->bind_param('i', $id_user);
     $rating_user_query->execute();
     $result = $rating_user_query->get_result();
@@ -144,7 +144,7 @@ function get_user_ratings($id_user)
 function get_movie_with_rating_count($rating_count)
 {
     $con = connect_to_db();
-    $rating_count_query = $con->prepare('select * from proyecto_SI.movies_mean_count where rating_count >= ?');
+    $rating_count_query = $con->prepare('select movie_id from proyecto_SI.movies_mean_count where rating_count >= ?');
     $rating_count_query->bind_param('i', $rating_count);
     $rating_count_query->execute();
     $result = $rating_count_query->get_result();
@@ -156,9 +156,11 @@ function get_movie_with_rating_count($rating_count)
     }
     return $movies;
 }
-function get_ratings($user_id){
+
+function get_ratings($user_id)
+{
     $con = connect_to_db();
-    $rating_user_query = $con->prepare('select * from proyecto_SI.ratings where userID like ?');
+    $rating_user_query = $con->prepare('select rating from proyecto_SI.ratings where userID like ?');
     $rating_user_query->bind_param('i', $user_id);
     $rating_user_query->execute();
     $result = $rating_user_query->get_result();
@@ -171,3 +173,45 @@ function get_ratings($user_id){
     return $ratings;
 }
 
+function make_external_urls($movie_id)
+{
+
+    $con = connect_to_db();
+    $query = $con->prepare('select imdbID,tmdbID from proyecto_SI.links where movieID like ?');
+    $query->bind_param('i', $movie_id);
+    $query->execute();
+    $result = $query->get_result();
+    $imdb_id = '';
+    $tmdb_id = '';
+    $urls = [
+        'imdb' => '',
+        'tmdb' => ''
+    ];
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $tmdb_id = $row['tmdbID'];
+            $imdb_id = $row['imdbID'];
+        }
+    }
+    $base_imdb_url = 'https://www.imdb.com/title/tt';
+    $base_tmdb_url = 'https://www.themoviedb.org/movie/';
+    $urls['imdb'] = $base_imdb_url . $imdb_id;
+    $urls['tmdb'] = $base_tmdb_url . $tmdb_id;
+    return $urls;
+}
+
+function get_movie_tags($movie_id)
+{
+    $con = connect_to_db();
+    $rating_user_query = $con->prepare('select tag from proyecto_SI.tags where movieID like ?');
+    $rating_user_query->bind_param('i', $movie_id);
+    $rating_user_query->execute();
+    $result = $rating_user_query->get_result();
+    $tags = [];
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $tags[] = $row['tag'];
+        }
+    }
+    return $tags;
+}
