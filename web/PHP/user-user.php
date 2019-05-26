@@ -197,12 +197,13 @@ function getUsers()
     }
     return $list;
 }
+
 function insert_users_in_ComboBox()
 {
     $user_global_mean = getUsers();
     $id = 1;
-    foreach ($user_global_mean as $user_global_mean) {
-        echo '<option id=' . $id . '>' . $user_global_mean . '</option>\n';
+    foreach ($user_global_mean as $a) {
+        echo '<option id=' . $id . '>' . $a . '</option>\n';
         $id++;
     }
 }

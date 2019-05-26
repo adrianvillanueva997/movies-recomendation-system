@@ -110,11 +110,5 @@ function item_make_single_prediction($user_id, $movie_id, $correlation_limit_1, 
 
 }
 
-/*
-$data = item_get_neighborhood(403, 0.4, 0.7, 10);
-console_log(key($data[0]));
-$predictions = item_make_predictions(1, $data);
-console_log($predictions);
-*/
 $data = item_make_single_prediction(1, 95, 0.5, 0.7, 10);
 console_log($data);
