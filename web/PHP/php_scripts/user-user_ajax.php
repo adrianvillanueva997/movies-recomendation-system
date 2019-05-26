@@ -16,6 +16,9 @@ if (isset($_POST['valor1'], $_POST['valor2'], $_POST['numero'], $_POST['state_ch
   $ranking = user_make_ranking($peliculas_no_vistas, $vecinos, $numero);
   console_log($ranking);
 
+  $print = print_ranking($ranking);
+
+
 //} else {
 	//phpAlert("Rellene todos los campos");
 }

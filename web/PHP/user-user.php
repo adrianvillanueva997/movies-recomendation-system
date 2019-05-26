@@ -150,9 +150,8 @@ function print_ranking($ranking)
     $max = count($ranking['movie_id']);
     for ($i = 0; $i < $max; $i++) {
         echo '<tr align="center">
-                    <td id="$i">' . $ranking['movie_id'][$i] . '</td>
-                    <td id="$i">' . $ranking['movie_name'][$i] . '</td>
-                    <td id="$i">' . $ranking['prediction'][$i] . '</td>
+                    <td id="$i">' . $ranking['movie_name'][$i] . '</td><br>
+                    <td id="$i">' . $ranking['prediction'][$i] . '</td><br><br>
                </tr>';
     }
 }
