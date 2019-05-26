@@ -155,7 +155,6 @@ include_once 'PHP/common.php';
                     <?php insert_users_in_ComboBox(); ?>
                 </datalist>
             </p>
-            <br><b>Predicción: 3.5 </b>
         </div>
 
         <div class="col-md-4">

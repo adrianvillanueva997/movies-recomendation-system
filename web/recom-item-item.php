@@ -107,7 +107,7 @@ include_once 'PHP/common.php';
             </p>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-12">
             <p> Umbral de similitud:
                 <input type="number" name="valor1" id="valor1" placeholder="Ej. 0.6" min="0" max="1" step="0.05"
                        required="required">
@@ -119,16 +119,14 @@ include_once 'PHP/common.php';
                 <input type="number" name="ranking" id="ranking" placeholder="Ej. 5" min="1" max="50" step="1"
                        required="required">
             </p>
-            <button type="submit" id="calcular" class="boton_personalizado">Calcular ranking</button>
-        </div>
-        <div class="col-md-4">
-            <p>
-                <input list="states_users" name="state_choice" id="state_choice" placeholder=" Seleccione un usuario"/>
+           <p>
+                <input list="states_users" name="users" id="users" placeholder=" Seleccione un usuario"/>
                 <datalist id="states_users">
                     <option>Seleccione una opción</option>
-                    <?php insert_users_in_ComboBox() ?>
+                    <?php insert_users_in_ComboBox(); ?>
                 </datalist>
-            </p>
+            </p><br>
+            <button type="submit" id="calcular" class="boton_personalizado">Calcular ranking</button>
         </div>
     </div>
 </div>
@@ -160,17 +158,24 @@ include_once 'PHP/common.php';
 
         <div class="col-md-4">
             <p>
+                <input list="states_users" name="users" id="users" placeholder=" Seleccione un usuario"/>
+                <datalist id="states_users">
+                    <option>Seleccione una opción</option>
+                    <?php insert_users_in_ComboBox(); ?>
+                </datalist>
+            </p>
+
+            <p>
                 <input list="states" name="pelis" id="pelis" placeholder=" Buscador de películas"/>
                 <datalist id="states">
                     <option>Seleccione una opción</option>
                     <?php insert_movies_in_ComboBox() ?>
                 </datalist>
             </p>
-            <br><b>Predicción: 3.5 </b>
         </div>
 
         <div class="col-md-4">
-            <button type="submit" id="predecir" class="boton_personalizado">Predecir</button>
+            <br><button type="submit" id="predecir" class="boton_personalizado">Predecir</button>
         </div>
 
         <div class="col-md-1">

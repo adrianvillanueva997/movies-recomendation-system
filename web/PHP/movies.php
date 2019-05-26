@@ -29,7 +29,7 @@ function insert_movies_in_ComboBox()
     $movies = getMovies();
     $id = 1;
     foreach ($movies as $movie) {
-        echo '<option id="' . $id . '" value="' . $movie . '"">\n';
+        echo '<option id="' . $id . '" value="' . $movie . '">';
         $id++;
     }
 }
