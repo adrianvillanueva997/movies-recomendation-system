@@ -164,6 +164,9 @@ if __name__ == '__main__':
     movies_count = get_movies_count()
     similitude_movies = get_most_rated_movies()
     similitude_movies.sort()
+    with ThreadPoolExecutor(max_workers=128) as executor:
+        for i in range(1, movies_count):
+            a = executor.submit(calculate_movies_mean_count, i)
     print(len(similitude_movies))
     print(similitude_movies)
     i = 0
