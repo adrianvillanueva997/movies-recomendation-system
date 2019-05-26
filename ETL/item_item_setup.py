@@ -166,7 +166,7 @@ if __name__ == '__main__':
     similitude_movies.sort()
     print(len(similitude_movies))
     print(similitude_movies)
-    i = 286
+    i = 0
     with ThreadPoolExecutor(max_workers=128) as executor:
         while i < user_count:
             i += 1

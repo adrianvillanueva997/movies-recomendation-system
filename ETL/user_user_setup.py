@@ -203,16 +203,16 @@ if __name__ == '__main__':
             logging.debug("Task Executed {}".format(
                 threading.current_thread()))
     logging.debug(f'Creating user_user mean table')
-    # create_user_user_mean()
+    create_user_user_mean()
     logging.info(f'Table user_user created successfully')
     logging.info('Calculating user to user mean')
-    # with ThreadPoolExecutor(max_workers=128) as executor:
-    #    for i in range(1, user_count):
-    #        a = executor.submit(calculate_user_to_user_mean, i, user_count)
+    with ThreadPoolExecutor(max_workers=128) as executor:
+        for i in range(1, user_count):
+            a = executor.submit(calculate_user_to_user_mean, i, user_count)
     logging.info('Creating similitude Table')
     create_similitude_table()
     logging.debug('Similitude table created successfully')
-    # with ThreadPoolExecutor(max_workers=128) as executor:
-    #    for i in range(1, user_count):
-    #        a = executor.submit(get_similar_movies_ratings, i, user_count)
+    with ThreadPoolExecutor(max_workers=128) as executor:
+        for i in range(1, user_count):
+            a = executor.submit(get_similar_movies_ratings, i, user_count)
     logger.info('Creating Cos correlation table')
