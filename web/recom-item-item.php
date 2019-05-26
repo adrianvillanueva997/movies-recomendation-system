@@ -5,7 +5,7 @@
     <meta http-equiv=”Content-Language” content=”es”>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta http-equiv=“refresh” content=“30”>
-    <link rel="shortcut icon" type="image/png" href="images/icon.png"/>
+    
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link href="css/star-rating.css" rel="stylesheet">
 
@@ -42,7 +42,7 @@
         <li><a href=index.html>Home</a></li>
         <li><a href="recom-user-user.php">User-User</a></li>
         <li><a class="active" href="recom-item-item.php">Ítem-Ítem</a></li>
-        <li><a href="valoraciones.php">Valoraciones</a></li>
+        <li><a href="index.php">Valoraciones</a></li>
     </ul>
 </nav>
 
@@ -71,9 +71,9 @@ include_once 'PHP/user-user.php';
                         </datalist>
                 </p>
 
-                    Valoración:
-                    <input type="number" placeholder="Ej. 3.5" min="0" max="5" step="0.5" required="required"> <br><br>
-
+                <p> Valoración:
+                <input type="number" placeholder="Ej. 3.5" min="0" max="5" step="0.5" required="required">
+                </p>
                 <button type="submit" class="boton_personalizado">Votar</button>
                 <br><br>
             </form>

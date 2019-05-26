@@ -52,9 +52,8 @@ function show_popular_movies()
         $movies_data['$images'] = $img;
         $movies_data['names'] = $name;
         $movies_data['$imdb_url'] = $urls['imdb'];
-        $movies_data['$tmdb_url'] = $urls['tmdb'];
+
     }
-    return $movies_data;
 }
 
 

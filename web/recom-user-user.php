@@ -10,7 +10,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="jquery-1.3.2.min.js" type="text/javascript"></script>
-    <link rel="shortcut icon" type="image/png" href="images/icon.png"/>
+
     <link rel="stylesheet" href="css/Principal.css">
 
     <script language="JavaScript" type="text/JavaScript">
@@ -42,7 +42,7 @@ include 'PHP/movies.php';
         <li><a href=index.html>Home</a></li>
         <li><a class="active" href="recom-user-user.php">User-User</a></li>
         <li><a href="recom-item-item.php">Ítem-Ítem</a></li>
-        <li><a href="valoraciones.php">Valoraciones</a></li>
+        <li><a href="index.php">Valoraciones</a></li>
     </ul>
 </nav>
 
@@ -82,7 +82,6 @@ include 'PHP/movies.php';
                 </p>
             </form>
         </div>
-
     </div>
 </div>
 
@@ -111,8 +110,8 @@ include 'PHP/movies.php';
             <th>Predicción</th>
         </tr>
         <?php
-        $unseen = get_unseen_movies($neighbours);
-        $ranking = make_ranking($unseen, $neighbours, 5);
+        $unseen = user_get_unseen_movies($neighbours);
+        $ranking = user_make_ranking($unseen, $neighbours, 5);
         print_ranking($ranking);
         ?>
     </table>
