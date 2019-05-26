@@ -25,6 +25,13 @@
         $('input.star').rating();
     });
     </script>
+
+    <script>
+    $(document).ready(function() {      
+        $('.carousel').carousel('pause');
+    });
+</script>
+
 </head>
 
 
@@ -49,7 +56,7 @@ include 'PHP/movies.php';
 <br>
 <div align="center"><h2> ¡Comienza valorando algunas películas! </h2> <br>
 
- <div id="myCarousel" class="carousel slide" data-ride="carousel">
+ <div id="myCarousel" class="carousel slide" data-interval="false" data-ride="carousel" data-pause="hover" >
     <!-- Indicators 
     <ol class="carousel-indicators">
         <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
