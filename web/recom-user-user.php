@@ -33,8 +33,9 @@
 
                     function (data, status) {
                         if (status == 'success') {
-                            $('#random').html(data);
-                            console.log(data);
+                            $('#ajax-response').html(data);
+                          $('#random').html(data);
+                          console.log(data);
 
                         }
                         console.log(status);
@@ -139,10 +140,10 @@ include_once 'PHP/common.php';
             <th>Similitud</th>
         </tr>
         <?php
-#usuario, limite 1, limite 2, limite de resultados
-$neighbours = user_get_neighbours(1, 0.8, 1, 5);
-print_neighbours($neighbours);
-?>
+        #usuario, limite 1, limite 2, limite de resultados
+        $neighbours = user_get_neighbours(1, 0.8, 1, 5);
+        print_neighbours($neighbours);
+        ?>
     </table>
 </h3>-->
 
@@ -150,10 +151,12 @@ print_neighbours($neighbours);
 <h3>
     <table align="center" border=2>
         <tr>
-            <th>ID</th>
-            <th>Título</th>
-            <th>Predicción</th>
+
+            <tr id="ajax-response"> </tr>
+
         </tr>
+
+
         <?php
         //$unseen = user_get_unseen_movies($neighbours);
         //$ranking = user_make_ranking($unseen, $neighbours, 5);
