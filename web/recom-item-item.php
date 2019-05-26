@@ -18,7 +18,7 @@
 
 
      <script language="JavaScript" type="text/JavaScript">
-        function envia(obj){
+       /* function envia(obj){
             if(
             (parseInt(document.getElementById("valor1").value,10)<parseInt(document.getElementById("valor2").value,10))
             && !isNaN(parseInt(document.getElementById("valor1").value,10))
@@ -28,7 +28,82 @@
             }else{
             alert("El valor de la derecha debe ser mayor que el de la izquierda");
             }
-            }
+            }*/
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#votar").click(function () {
+                var state_choice = $("#state_choice").val();
+                var numero = $("#numero").val();
+
+                $.post("PHP/php_scripts/user-user_ajax3.php",
+                    {   
+                        'state_choice': state_choice,
+                        'numero': numero
+                    },   
+                    
+                    function(data,status){ 
+                        if (status == 'success') {
+                          $('#random3').html(data);
+                        console.log(data);
+                        }
+                        console.log(status);
+                    });
+            });
+        });
+
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#calcular").click(function () {
+                var valor1 = $("#valor1").val();
+                var valor2= $("#valor2").val();
+                var ranking = $("#ranking").val();
+
+                $.post("PHP/php_scripts/user-user_ajax4.php",
+                    { 'valor1': valor1,
+                        'valor2': valor2,
+                        'ranking': ranking
+                    },   
+                    
+                    function(data,status){ 
+                        if (status == 'success') {
+                          $('#random4').html(data);
+                          console.log(data);
+
+                        }
+                        console.log(status);
+                    });
+            });
+        });
+
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#predecir").click(function () {
+                var pelis = $("#pelis").val();
+               
+
+                $.post("PHP/php_scripts/user-user_ajax5.php",
+                    { 'pelis': pelis
+                    },   
+                    
+                    function(data,status){ 
+                        if (status == 'success') {
+                          $('#random5').html(data);
+                        console.log(data);
+                        }
+                        console.log(status);
+                    });
+            });
+        });
+
     </script>
 
 </head>
@@ -62,9 +137,8 @@ include_once 'PHP/user-user.php';
         </div>
 
         <div class="col-md-4">
-            <form action="../../form-result.php" target="_blank">
                 <p> 
-                     <input list="states" name="state-choice" placeholder=" Buscador de películas"/>
+                     <input list="states" name="state_choice" id="state_choice" placeholder=" Buscador de películas"/>
                        <datalist id="states">
                             <option>Seleccione una opción</option>
                             <?php insert_movies_in_ComboBox() ?>
@@ -72,25 +146,22 @@ include_once 'PHP/user-user.php';
                 </p>
 
                 <p> Valoración:
-                <input type="number" placeholder="Ej. 3.5" min="0" max="5" step="0.5" required="required">
+                <input type="number" name="numero" id="numero" placeholder="Ej. 3.5" min="0" max="5" step="0.5" required="required">
                 </p>
-                <button type="submit" class="boton_personalizado">Votar</button>
+                <button type="submit" id="votar" class="boton_personalizado">Votar</button>
                 <br><br>
-            </form>
         </div>
 
        <div class="col-md-4">
-            <form action="../../form-result.php" target="_blank">
                  <p> Umbral de similitud:
                     <input type="number" name="valor1" id="valor1" placeholder="Ej. 0.6" min="0" max="1" step="0.05" required="required">
                     - 
                     <input type="number" name="valor2" id="valor2" placeholder="Ej. 0.85" min="0" max="1" step="0.05" required="required">
                 </p>
                  <p> Items de ranking:
-                <input type="number" name="numero" placeholder="Ej. 5"  min="1" max="50" step="1" required="required">
+                <input type="number" name="ranking" id="ranking" placeholder="Ej. 5"  min="1" max="50" step="1" required="required">
                 </p>
-                <button type="submit" class="boton_personalizado">Calcular ranking</button>
-            </form>
+                <button type="submit" id="calcular" class="boton_personalizado">Calcular ranking</button>
         </div>
 
     </div>
@@ -133,20 +204,18 @@ include_once 'PHP/user-user.php';
         </div>
 
         <div class="col-md-4">
-            <form class=recomendar action="search.php" method="get">
                 <p> 
-                    <input list="states" name="state-choice" placeholder=" Buscador de películas"/>
+                    <input list="states" name="pelis" id="pelis" placeholder=" Buscador de películas"/>
                        <datalist id="states">
                             <option>Seleccione una opción</option>
                             <?php insert_movies_in_ComboBox() ?>
                         </datalist>
                 </p>
                 <br><b>Predicción: 3.5 </b>
-            </form>
         </div>
 
         <div class="col-md-4">
-            <button type="submit" class="boton_personalizado">Predecir</button>
+            <button type="submit" id="predecir" class="boton_personalizado">Predecir</button>
         </div>
 
         <div class="col-md-1">

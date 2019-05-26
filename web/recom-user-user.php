@@ -13,26 +13,71 @@
 
     <link rel="stylesheet" href="css/Principal.css">
 
-    <script language="JavaScript" type="text/JavaScript">
-        function envia(obj){
-            if(
-            (parseInt(document.getElementById("valor1").value,10)<parseInt(document.getElementById("valor2").value,10))
-            && !isNaN(parseInt(document.getElementById("valor1").value,10))
-            && !isNaN(parseInt(document.getElementById("valor2").value,10))
-            ){
-             obj.submit();
-            }else{
-            alert("El valor de la derecha debe ser mayor que el de la izquierda");
-            }
-            }
+    
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#recomendar").click(function () {
+                var valor1 = $("#valor1").val();
+                var valor2= $("#valor2").val();
+                var numero = $("#numero").val();
+                var state_choice = $("#state_choice").val();
+
+                $.post("PHP/php_scripts/user-user_ajax.php",
+                    { 'valor1': valor1,
+                        'valor2': valor2,
+                        'numero': numero,
+                        'state_choice': state_choice
+                    },   
+                    
+                    function(data,status){ 
+                        if (status == 'success') {
+                          $('#random').html(data);
+                          console.log(data);
+
+                        }
+                        console.log(status);
+                    });
+            });
+        });
+
+    </script>
+
+    <script type="text/javascript">
+         $(document).ready(function () {
+
+            $("#predecir").click(function () {
+                var users = $("#users").val();
+                var movies= $("#movies").val();
+                
+                $.post("PHP/php_scripts/user-user_ajax2.php",
+                    { 'users': users,
+                        'movies': movies
+                    },   
+                    
+                    function(data,status){ 
+                        if (status == 'success') {
+                          $('#random2').html(data);
+                          console.log(data);
+                        }
+                        console.log(status);
+                    });
+            });
+        });
+
+
+
     </script>
 </head>
 
 <body>
 
 <?php
-include 'PHP/user-user.php';
-include 'PHP/movies.php';
+include_once 'PHP/user-user.php';
+include_once 'PHP/movies.php';
+include_once 'PHP/common.php';
 ?>
 
 
@@ -53,39 +98,35 @@ include 'PHP/movies.php';
     <div class="row">
         <div class="col-md-4">
 
-            <form class=recomendar action="search.php" method="post" target="_blank">
                 <p> Umbral de similitud:
                     <input type="number" name="valor1" id="valor1" placeholder="Ej. 0.6" min="0" max="1" step="0.05" required="required">
                     - 
                     <input type="number" name="valor2" id="valor2" placeholder="Ej. 0.85" min="0" max="1" step="0.05" required="required">
-                    <br><br> <button type="submit" onClick="envia(this)" class="boton_personalizado">Recomendar</button>
+                    <br><br> <button id="recomendar" type="submit" onClick="envia(this)" class="boton_personalizado">Recomendar</button>
                 </p>
-            </form>
         </div>
 
         <div class="col-md-4">
-            <form action="../../form-result.php" target="_blank">
                 <p> Items de ranking:
-                <input type="number" name="numero" placeholder="Ej. 5"  min="1" max="50" step="1" required="required">
+                <input type="number" name="numero" id="numero" placeholder="Ej. 5"  min="1" max="50" step="1" required="required">
                 </p>
-            </form>
         </div>
 
         <div class="col-md-4">
-            <form action="../../form-result.php" target="_blank">
                 <p> 
-                    <input list="states" name="state-choice" placeholder=" Seleccione un usuario"/>
+                    <input list="states" name="state_choice" id="state_choice" placeholder=" Seleccione un usuario"/>
                        <datalist id="states">
                             <option>Seleccione una opción</option>
                             <?php insert_users_in_ComboBox() ?>
                         </datalist>
                 </p>
-            </form>
         </div>
     </div>
 </div>
 
-
+<div id="random">
+</div>
+<!--
 <h2 align="center">Vecinos</h2>
 <h3>
     <table align="center" border=2>
@@ -99,7 +140,7 @@ include 'PHP/movies.php';
         print_neighbours($neighbours);
         ?>
     </table>
-</h3>
+</h3>-->
 
 <h2 align="center"> Ranking</h2>
 <h3>
@@ -110,9 +151,9 @@ include 'PHP/movies.php';
             <th>Predicción</th>
         </tr>
         <?php
-        $unseen = user_get_unseen_movies($neighbours);
-        $ranking = user_make_ranking($unseen, $neighbours, 5);
-        print_ranking($ranking);
+        //$unseen = user_get_unseen_movies($neighbours);
+        //$ranking = user_make_ranking($unseen, $neighbours, 5);
+        //print_ranking($ranking);
         ?>
     </table>
 </h3>
@@ -129,30 +170,26 @@ include 'PHP/movies.php';
         </div>
 
         <div class="col-md-4">
-            <form class=recomendar action="search.php" method="get">
                 <p> 
-                    <input list="states" name="state-choice" placeholder=" Seleccione un usuario"/>
+                    <input list="states" name="users" id="users" placeholder=" Seleccione un usuario"/>
                        <datalist id="states">
                             <option>Seleccione una opción</option>
-                            <?php insert_users_in_ComboBox() ?>
+                            <?php insert_users_in_ComboBox(); ?>
                         </datalist>
                 </p>
                 <br><b>Predicción: 3.5 </b>
-            </form>
         </div>
 
         <div class="col-md-4">
-            <form action="../../form-result.php" target="_blank">
                 <p> 
-                     <input list="states" name="state-choice" placeholder=" Buscador de películas"/>
+                     <input list="states" name="movies" id="movies" id="state_choice" placeholder=" Buscador de películas"/>
                        <datalist id="states">
                             <option>Seleccione una opción</option>
-                            <?php insert_movies_in_ComboBox() ?>
+                            <?php insert_movies_in_ComboBox(); ?>
                         </datalist>
                     <br><br>
-                    <button type="submit" class="boton_personalizado">Predecir</button>
+                    <button type="submit" id="predecir" class="boton_personalizado">Predecir</button>
                 </p>
-            </form>
 
             <div class="col-md-1">
             </div>
