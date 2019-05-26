@@ -30,7 +30,30 @@
     $(document).ready(function() {      
         $('.carousel').carousel('pause');
     });
-</script>
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#enviar").click(function () {
+                var submitRatingStar = $("#submitRatingStar").val();
+
+                $.post("PHP/php_scripts/valoraciones_ajax.php",
+                    { 'submitRatingStar': submitRatingStar,
+                    },   
+                    
+                    function(data,status){ 
+                        if (status == 'success') {
+                          $('#random6').html(data);
+                          console.log(data);
+
+                        }
+                        console.log(status);
+                    });
+            });
+        });
+
+    </script>
 
 </head>
 
@@ -112,7 +135,7 @@ include 'PHP/movies.php';
                     <input name="rate" value="4" type="radio" class="star" /> 
                     <input name="rate" value="5" type="radio" class="star"/>
                 </div>
-                <button type="submit" name="submitRatingStar" class="btn btn-primary btn-sm">Enviar</button>
+                <button type="submit" name="submitRatingStar" is="submitRatingStar" class="btn btn-primary btn-sm">Enviar</button>
             </form>
         </div>
 </div>
