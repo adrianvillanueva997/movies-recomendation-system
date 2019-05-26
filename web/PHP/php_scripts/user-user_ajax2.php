@@ -13,6 +13,11 @@ if (isset($_POST['users'], $_POST['movies'])) {
     $ranking = user_make_single_prediction($movies, $vecinos);
     $url = scrape_imdb_img($movies);
     echo 'La predicción para la película es: ' . $ranking['rating'];
-    console_log($url);
-    echo $url;
+    $tags = get_movie_tags($movies);
+    $urls = make_external_urls($movies);
+    echo "\n";
+    echo 'Tags de la pelicula: ' . $tags;
+    echo "\n imdb:" . $urls['imdb'];
+    echo "\n imdb:" . $urls['tmdb'];
+
 }

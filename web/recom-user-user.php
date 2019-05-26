@@ -16,7 +16,6 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-
             $("#recomendar").click(function () {
                 var valor1 = $("#valor1").val();
                 var valor2 = $("#valor2").val();
@@ -34,15 +33,10 @@
                     function (data, status) {
                         if (status == 'success') {
                             $('#ajax-response').html(data);
-                          $('#random').html(data);
-                          console.log(data);
-
                         }
-                        console.log(status);
                     });
             });
         });
-
     </script>
 
     <script type="text/javascript">
@@ -57,13 +51,10 @@
                         'users': users,
                         'movies': movies
                     },
-
                     function (data, status) {
                         if (status === 'success') {
                             $('#random2').html(data);
-                            console.log(data);
                         }
-                        console.log(status);
                     });
             });
         });
@@ -131,37 +122,17 @@ include_once 'PHP/common.php';
 
 <div id="random">
 </div>
-<!--
-<h2 align="center">Vecinos</h2>
-<h3>
-    <table align="center" border=2>
-        <tr>
-            <th>id usuario</th>
-            <th>Similitud</th>
-        </tr>
-        <?php
-        #usuario, limite 1, limite 2, limite de resultados
-        $neighbours = user_get_neighbours(1, 0.8, 1, 5);
-        print_neighbours($neighbours);
-        ?>
-    </table>
-</h3>-->
+
 
 <h2 align="center"> Ranking</h2>
 <h3>
     <table align="center" border=2>
         <tr>
 
-            <tr id="ajax-response"> </tr>
+        <tr id="ajax-response"></tr>
 
         </tr>
 
-
-        <?php
-        //$unseen = user_get_unseen_movies($neighbours);
-        //$ranking = user_make_ranking($unseen, $neighbours, 5);
-        //print_ranking($ranking);
-        ?>
     </table>
 </h3>
 
@@ -211,8 +182,7 @@ include_once 'PHP/common.php';
 <footer>
     <div class=footer align="center">
         <p> Recomendador creado por <a class="linkFooter" href="https://github.com/adrianvillanueva997"> Adrián
-                Villanueva </a> y <a class="linkFooter" href="https://github.com/laura3797""> Laura Vizcaíno</a>,
-            derechos reservados &copy; </p>
+                Villanueva </a> y <a class="linkFooter" href="https://github.com/laura3797""> Laura Vizcaíno</a></p>
     </div>
 </footer>
 

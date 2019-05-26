@@ -14,7 +14,6 @@ if (isset($_POST['valor1'], $_POST['valor2'], $_POST['numero'], $_POST['state_ch
   $peliculas_no_vistas = user_get_unseen_movies($vecinos);
 
   $ranking = user_make_ranking($peliculas_no_vistas, $vecinos, $numero);
-  console_log($ranking);
 
   $print = print_ranking($ranking);
 
