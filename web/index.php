@@ -12,6 +12,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <link href="http://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <!-- Latest compiled and minified CSS -->
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
     <script src="js/jquery.rating.pack.js"></script>
 
     <link rel="stylesheet" href="css/Principal.css">
@@ -47,12 +50,12 @@ include 'PHP/movies.php';
 
   <div id="myCarousel" class="carousel slide" data-ride="carousel">
 
-  <!-- Indicators
+  <!-- Indicators -->
   <ol class="carousel-indicators">
     <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
     <li data-target="#myCarousel" data-slide-to="1"></li>
     <li data-target="#myCarousel" data-slide-to="2"></li>
-  </ol>-->
+  </ol>
 
   <!-- Wrapper for slides -->
   <div class="carousel-inner" role="listbox">
