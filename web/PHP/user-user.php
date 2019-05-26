@@ -203,7 +203,7 @@ function insert_users_in_ComboBox()
     $user_global_mean = getUsers();
     $id = 1;
     foreach ($user_global_mean as $a) {
-        echo '<option id=' . $id . '>' . $a . '</option>\n';
+        echo '<option id="' . $id . '"">' . $a . '</option>\n';
         $id++;
     }
 }

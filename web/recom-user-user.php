@@ -110,8 +110,8 @@ include_once 'PHP/common.php';
 
         <div class="col-md-4">
             <p>
-                <input list="states" name="state_choice" id="state_choice" placeholder=" Seleccione un usuario"/>
-                <datalist id="states">
+                <input list="states_users" name="state_choice" id="state_choice" placeholder=" Seleccione un usuario"/>
+                <datalist id="states_users">
                     <option>Seleccione una opción</option>
                     <?php insert_users_in_ComboBox() ?>
                 </datalist>
@@ -149,8 +149,8 @@ include_once 'PHP/common.php';
 
         <div class="col-md-4">
             <p>
-                <input list="states" name="users" id="users" placeholder=" Seleccione un usuario"/>
-                <datalist id="states">
+                <input list="states_users" name="users" id="users" placeholder=" Seleccione un usuario"/>
+                <datalist id="states_users">
                     <option>Seleccione una opción</option>
                     <?php insert_users_in_ComboBox(); ?>
                 </datalist>
