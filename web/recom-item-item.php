@@ -117,7 +117,7 @@
         <li><a href=index.html>Home</a></li>
         <li><a href="recom-user-user.php">User-User</a></li>
         <li><a class="active" href="recom-item-item.php">Ítem-Ítem</a></li>
-        <li><a href="index.php">Valoraciones</a></li>
+        <li><a href="user_0.php">Valoraciones</a></li>
     </ul>
 </nav>
 

@@ -4,15 +4,15 @@ include_once '../user-user.php';
 include_once '../utilities.php';
 
 
-if (isset($_POST['users'], $_POST['movies'])){
+if (isset($_POST['users'], $_POST['movies'])) {
 
-  $users = $_POST['users'];
-  $movies = $_POST['movies'];
+    $users = $_POST['users'];
+    $movies = $_POST['movies'];
 
-  echo  "<p>El numero introdocido es $users </p>";
-  echo  "<p>El numero introdocido es $movies </p>";
-
-//} else {
-	//phpAlert("Rellene todos los campos");
+    $vecinos = user_get_neighbours($users, 0.5, 1, 1);
+    $ranking = user_make_single_prediction($movies, $vecinos);
+    $url = scrape_imdb_img($movies);
+    echo 'La predicción para la película es: ' . $ranking['rating'];
+    console_log($url);
+    echo $url;
 }
-?>

@@ -72,7 +72,7 @@ include 'PHP/movies.php';
         <li><a href=index.html>Home</a></li>
         <li><a href="recom-user-user.php">User-User</a></li>
         <li><a href="recom-item-item.php">Ítem-Ítem</a></li>
-        <li><a class="active" href="index.php">Valoraciones</a></li>
+        <li><a class="active" href="user_0.php">Valoraciones</a></li>
     </ul>
 </nav>
 
@@ -127,7 +127,7 @@ include 'PHP/movies.php';
 <br>  
 <div class="row">
    <div  id="content" class="col-lg-1">
-            <form action="index.php" method="post">
+            <form action="user_0.php" method="post">
                 <div class="star_content">
                     <input name="rate" value="1" type="radio" class="star"/> 
                     <input name="rate" value="2" type="radio" class="star"/> 
