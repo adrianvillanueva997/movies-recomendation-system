@@ -218,7 +218,7 @@ function get_movie_tags($movie_id)
 function scrape_imdb_img($movie_id)
 {
     $movie_url = make_external_urls($movie_id);
-    $output = shell_exec('python python_scripts/imdb_scrapper.py ' . $movie_url['imdb']);
+    $output = shell_exec('python3 python_scripts/imdb_scrapper.py ' . $movie_url['imdb']);
     return $output;
 }
 
