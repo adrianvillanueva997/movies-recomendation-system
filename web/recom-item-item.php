@@ -19,7 +19,6 @@
                 var valor2 = $("#valor2").val();
                 var ranking = $("#ranking").val();
                 var users = $("#users").val();
-                console.log('Se pulsa el botón');
                 $.post("PHP/php_scripts/user-user_ajax3.php",
                     {
                         'valor1': valor1,
@@ -30,7 +29,6 @@
                     function (data, status) {
                         if (status === 'success') {
                             $('#ajax-response2').html(data);
-                            console_log("ay");
                         }
                     });
             });
@@ -41,9 +39,7 @@
         $(document).ready(function () {
             $("#predecir").click(function () {
                 var pelis = $("#pelis").val();
-                var users = $("#users").val();
-                console.log(pelis);
-                console.log(users);
+                var users = $("#users_2").val();
                 $.post("PHP/php_scripts/user-user_ajax4.php",
                     {
                         'pelis': pelis,
@@ -51,8 +47,7 @@
                     },
                     function (data, status) {
                         if (status === 'success') {
-                            $('#random5').html(data);
-                            console.log(status);
+                            $('#ajax-response3').html(data);
                         }
                     });
             });
@@ -148,7 +143,7 @@ include_once 'PHP/common.php';
 
         <div class="col-md-4">
             <p>
-                <input list="states_users" name="users" id="users" placeholder=" Seleccione un usuario"/>
+                <input list="states_users" name="users" id="users_2" placeholder=" Seleccione un usuario"/>
                 <datalist id="states_users">
                     <option>Seleccione una opción</option>
                     <?php insert_users_in_ComboBox(); ?>
@@ -170,11 +165,11 @@ include_once 'PHP/common.php';
         </div>
         <div class="col-md-1">
         </div>
-        <div id="random5"></div>
     </div>
 </div>
-
+<div id="ajax-response3" align="center"></div>
 <br>
+
 <footer>
     <div class=footer align="center">
         <p> Recomendador creado por <a class="linkFooter" href="https://github.com/adrianvillanueva997"> Adrián

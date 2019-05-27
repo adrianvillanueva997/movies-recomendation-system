@@ -159,7 +159,6 @@ function print_ranking($ranking)
 function user_make_single_prediction($movie_id, $neighbours)
 {
     $movie_status = check_seen_movie($neighbours['user1'], $movie_id);
-    console_log($movie_status);
     if ($movie_status['status'] === false) {
         $max = count($neighbours['user_id']);
         $numerator = 0;
@@ -170,7 +169,6 @@ function user_make_single_prediction($movie_id, $neighbours)
             $user_id = $neighbours['user_id'][$i];
             $user_similitude = $neighbours['similitude'][$i];
             $movie_rating = get_user_movie_rating($user_id, $movie_id);
-            console_log($movie_rating);
             echo "\n";
             if ($movie_rating >= 0) {
                 $mean = get_user_global_mean($user_id);

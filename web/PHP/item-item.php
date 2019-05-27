@@ -35,8 +35,6 @@ function get_movie_correlation($movie_id, $correlation_limit_1, $correlation_lim
         }
     }
 
-    console_log($correlations);
-    echo "\n";
     return $correlations;
 
 }
@@ -87,7 +85,6 @@ function item_make_single_prediction($user_id, $movie_id, $correlation_limit_1, 
         'movie_id' => $movie_id,
         'movie_name' => 'None'
     ];
-    console_log($movie_status);
     if ($movie_status['status'] === false) {
         $movie_correlations = get_movie_correlation($movie_id, $correlation_limit_1, $correlation_limit_2, $neighbour_limit);
         $user_ratings = get_ratings($user_id);
@@ -111,6 +108,5 @@ function item_make_single_prediction($user_id, $movie_id, $correlation_limit_1, 
 
 }
 
-//$data = item_get_neighborhood(1, 0.1, 0.5, 5);
-//$predictions = item_make_predictions(1, $data);
-//console_log($predictions);
+//$ranking = item_make_single_prediction(1, 1, 0.1, 0.7, 5);
+//console_log($ranking);

@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="jquery-1.3.2.min.js" type="text/javascript"></script>
 
     <link rel="stylesheet" href="css/Principal.css">
 
@@ -43,7 +42,6 @@
             $("#predecir").click(function () {
                 var users = $("#users").val();
                 var movies = $("#movies").val();
-                console.log(movies);
                 $.post("PHP/php_scripts/user-user_ajax2.php",
                     {
                         'users': users,
@@ -165,7 +163,7 @@ include_once 'PHP/common.php';
                 <br><br>
                 <button type="submit" id="predecir" class="boton_personalizado">Predecir</button>
             </p>
-            <div id="random2"></div>
+
 
             <div class="col-md-1">
             </div>
@@ -173,7 +171,7 @@ include_once 'PHP/common.php';
         </div>
     </div>
 </div>
-
+<div id="random2" align="center"></div>
 
 <br>
 <footer>
