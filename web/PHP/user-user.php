@@ -159,7 +159,8 @@ function print_ranking($ranking)
 function user_make_single_prediction($movie_id, $neighbours)
 {
     $movie_status = check_seen_movie($neighbours['user1'], $movie_id);
-    if ($movie_status['status']) {
+    console_log($movie_status);
+    if ($movie_status['status'] === false) {
         $max = count($neighbours['user_id']);
         $numerator = 0;
         $denominator = 0;
@@ -169,15 +170,18 @@ function user_make_single_prediction($movie_id, $neighbours)
             $user_id = $neighbours['user_id'][$i];
             $user_similitude = $neighbours['similitude'][$i];
             $movie_rating = get_user_movie_rating($user_id, $movie_id);
+            console_log($movie_rating);
+            echo "\n";
             if ($movie_rating >= 0) {
                 $mean = get_user_global_mean($user_id);
                 $numerator += $user_similitude * ($movie_rating - $mean);
                 $denominator += $user_similitude;
             }
         }
-        if ($denominator > 0) {
+        if ($denominator !== 0) {
             $prediction = $original_user_mean + ($numerator / $denominator);
             $movie_status['rating'] = $prediction;
+            console_log($prediction);
         }
         return $movie_status;
     }
@@ -207,3 +211,10 @@ function insert_users_in_ComboBox()
         $id++;
     }
 }
+/*
+$vecinos = user_get_neighbours(2, 0.1, 1, 10);
+console_log($vecinos);
+echo "\n";
+$ranking = user_make_single_prediction(1, $vecinos);
+console_log($ranking);
+*/

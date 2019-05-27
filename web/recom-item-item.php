@@ -42,6 +42,8 @@
             $("#predecir").click(function () {
                 var pelis = $("#pelis").val();
                 var users = $("#users").val();
+                console.log(pelis);
+                console.log(users);
                 $.post("PHP/php_scripts/user-user_ajax4.php",
                     {
                         'pelis': pelis,
@@ -155,7 +157,7 @@ include_once 'PHP/common.php';
 
             <p>
                 <input list="states" name="pelis" id="pelis" placeholder=" Buscador de películas"/>
-                <datalist id="states">
+                <datalist id="states_movies">
                     <option>Seleccione una opción</option>
                     <?php insert_movies_in_ComboBox() ?>
                 </datalist>

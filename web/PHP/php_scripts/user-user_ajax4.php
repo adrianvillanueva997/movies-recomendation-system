@@ -2,7 +2,8 @@
 
 include_once '../user-user.php';
 include_once '../utilities.php';
-
+include_once '../item-item.php';
+include_once '../common.php';
 
 if (isset($_POST['users'], $_POST['movies'])) {
     $users = $_POST['users'];

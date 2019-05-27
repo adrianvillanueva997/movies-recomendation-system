@@ -222,3 +222,17 @@ function scrape_imdb_img($movie_id)
     return $output;
 }
 
+function get_movie_from_title($movie_name){
+    $con = connect_to_db();
+    $rating_user_query = $con->prepare('select movieID from proyecto_SI.movies where title = ?');
+    $rating_user_query->bind_param('s', $movie_name);
+    $rating_user_query->execute();
+    $result = $rating_user_query->get_result();
+    $movie_id = 0;
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $movie_id = $row['movieID'];
+        }
+    }
+    return $movie_id;
+}

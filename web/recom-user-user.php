@@ -43,7 +43,7 @@
             $("#predecir").click(function () {
                 var users = $("#users").val();
                 var movies = $("#movies").val();
-
+                console.log(movies);
                 $.post("PHP/php_scripts/user-user_ajax2.php",
                     {
                         'users': users,
