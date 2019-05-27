@@ -19,6 +19,7 @@
                 var valor2 = $("#valor2").val();
                 var ranking = $("#ranking").val();
                 var users = $("#users").val();
+                console.log('Se pulsa el botón');
                 $.post("PHP/php_scripts/user-user_ajax3.php",
                     {
                         'valor1': valor1,
@@ -27,7 +28,6 @@
                         'users': users
                     },
                     function (data, status) {
-                        console.log(data);
                         if (status === 'success') {
                             $('#ajax-response2').html(data);
                             console_log("ay");

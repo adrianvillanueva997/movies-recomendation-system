@@ -8,7 +8,6 @@ if (isset($_POST['users'], $_POST['movies'])) {
     $users = $_POST['users'];
     $movies = $_POST['movies'];
     $ranking = item_make_single_prediction($users, $movies, 0.1, 0.7, 5);
-    console_log($data);
     $url = scrape_imdb_img($movies);
     echo 'La predicción para la película es: ' . $ranking['rating'];
     $tags = get_movie_tags($movies);
