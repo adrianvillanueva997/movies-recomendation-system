@@ -21,7 +21,6 @@
                 var valor2 = $("#valor2").val();
                 var numero = $("#numero").val();
                 var state_choice = $("#state_choice").val();
-
                 $.post("PHP/php_scripts/user-user_ajax.php",
                     {
                         'valor1': valor1,
@@ -29,9 +28,8 @@
                         'numero': numero,
                         'state_choice': state_choice
                     },
-
                     function (data, status) {
-                        if (status == 'success') {
+                        if (status === 'success') {
                             $('#ajax-response').html(data);
                         }
                     });

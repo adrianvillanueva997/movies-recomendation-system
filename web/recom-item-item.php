@@ -5,37 +5,32 @@
     <meta http-equiv=”Content-Language” content=”es”>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta http-equiv=“refresh” content=“30”>
-
+    <title></title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link href="css/star-rating.css" rel="stylesheet">
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="jquery-1.3.2.min.js" type="text/javascript"></script>
-    <script src="js/star-rating.min.js"></script>
-
     <link rel="stylesheet" href="css/Principal.css">
 
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#recomendar").click(function () {
+            $("#calcular").click(function () {
                 var valor1 = $("#valor1").val();
                 var valor2 = $("#valor2").val();
-                var numero = $("#numero").val();
-                var state_choice = $("#state_choice").val();
-
+                var ranking = $("#ranking").val();
+                var users = $("#users").val();
                 $.post("PHP/php_scripts/user-user_ajax3.php",
                     {
                         'valor1': valor1,
                         'valor2': valor2,
-                        'numero': numero,
-                        'state_choice': state_choice
+                        'ranking': ranking,
+                        'users': users
                     },
-
                     function (data, status) {
+                        console.log(data);
                         if (status === 'success') {
-                            $('#ajax-response').html(data);
+                            $('#ajax-response2').html(data);
+                            console_log("ay");
                         }
                     });
             });
@@ -44,26 +39,22 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-
             $("#predecir").click(function () {
                 var pelis = $("#pelis").val();
-
-
-                $.post("PHP/php_scripts/user-user_ajax5.php",
+                var users = $("#users").val();
+                $.post("PHP/php_scripts/user-user_ajax4.php",
                     {
-                        'pelis': pelis
+                        'pelis': pelis,
+                        'users': users
                     },
-
                     function (data, status) {
-                        if (status == 'success') {
+                        if (status === 'success') {
                             $('#random5').html(data);
-                            console.log(data);
+                            console.log(status);
                         }
-                        console.log(status);
                     });
             });
         });
-
     </script>
 
 </head>
@@ -92,21 +83,19 @@ include_once 'PHP/common.php';
 
 <div class="container">
     <h2> Valoraciones del Usuario 0</h2> <br>
-
     <div class="align center">
         <div class="col-md-3">
         </div>
-
         <div class="col-md-4">
             <p>
-                <input type="hidden" list="states" name="state_choice" id="state_choice" placeholder=" Buscador de películas"/>
+                <input type="hidden" list="states" name="state_choice" id="state_choice"
+                       placeholder=" Buscador de películas"/>
                 <datalist id="states">
                     <option>Seleccione una opción</option>
                     <?php insert_movies_in_ComboBox() ?>
                 </datalist>
             </p>
         </div>
-
         <div class="col-md-12">
             <p> Umbral de similitud:
                 <input type="number" name="valor1" id="valor1" placeholder="Ej. 0.6" min="0" max="1" step="0.05"
@@ -119,26 +108,25 @@ include_once 'PHP/common.php';
                 <input type="number" name="ranking" id="ranking" placeholder="Ej. 5" min="1" max="50" step="1"
                        required="required">
             </p>
-           <p>
+            <p>
                 <input list="states_users" name="users" id="users" placeholder=" Seleccione un usuario"/>
                 <datalist id="states_users">
                     <option>Seleccione una opción</option>
                     <?php insert_users_in_ComboBox(); ?>
                 </datalist>
-            </p><br>
+            </p>
+            <br>
             <button type="submit" id="calcular" class="boton_personalizado">Calcular ranking</button>
         </div>
     </div>
 </div>
-
-
 <br>
 <h2 align="center"> Ranking</h2>
 <h3>
     <table align="center" border=2>
         <tr>
 
-        <tr id="ajax-response"></tr>
+        <tr id="ajax-response2"></tr>
 
         </tr>
 
@@ -175,14 +163,13 @@ include_once 'PHP/common.php';
         </div>
 
         <div class="col-md-4">
-            <br><button type="submit" id="predecir" class="boton_personalizado">Predecir</button>
+            <br>
+            <button type="submit" id="predecir" class="boton_personalizado">Predecir</button>
         </div>
-
         <div class="col-md-1">
         </div>
-
+        <div id="random5"></div>
     </div>
-</div>
 </div>
 
 <br>

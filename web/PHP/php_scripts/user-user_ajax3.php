@@ -1,18 +1,20 @@
 <?php
 
-include_once '../user-user.php';
 include_once '../utilities.php';
 include_once '../user-user.php';
+include_once '../item-item.php';
 
-if (isset($_POST['valor1'], $_POST['valor2'], $_POST['numero'], $_POST['state_choice'])) {
+if (isset($_POST['valor1'], $_POST['valor2'], $_POST['ranking'], $_POST['users'])) {
     $valor1 = $_POST['valor1'];
     $valor2 = $_POST['valor2'];
-    $numero = $_POST['numero'];
-    $state_choice = $_POST['state_choice'];
-    $numero = $_POST['numero'];
-
-    $data = item_get_neighborhood($state_choice, $valor1, $valor2, $numero);
-    $predictions = item_make_predictions($state_choice, $data);
-    console_log($predictions);
+    $ranking = $_POST['ranking'];
+    $users = $_POST['users'];
+    console_log($valor1);
+    console_log($valor2);
+    console_log($ranking);
+    console_log($users);
+    $data = item_get_neighborhood($users, $valor1, $valor2, $ranking);
+    $predictions = item_make_predictions($users, $data);
+    console_log('ay');
     print_ranking($predictions);
 }

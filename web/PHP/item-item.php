@@ -110,5 +110,5 @@ function item_make_single_prediction($user_id, $movie_id, $correlation_limit_1, 
 
 }
 
-$data = item_make_single_prediction(1, 95, 0.5, 0.7, 10);
+$data = item_make_single_prediction(1, 2, 0.5, 0.7, 10);
 console_log($data);
